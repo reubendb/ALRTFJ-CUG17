@@ -8,6 +8,7 @@
 \usepackage{url}
 \usepackage{tabularx}
 \usepackage{subfig}
+\usepackage{float}
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
@@ -121,14 +122,42 @@ Performance; Benchmarking; Computer architecture
 
 \section{Use Cases}
 \label{sec:results}
-\subsection{filesystem tests}
-We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis.  The mdtest metadata test is also run on the home and scratch filesystems to validate metadata server performance.  Both tests create plots that we review when checking recent overall filesystem performance.  These user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric.  Both of the tests are set to run as scheduled by Jenkins with a best-effort through our batch system.  The tests block such that the next test will not start until the previous one has completed through the batch system.  We employ a watchdog script to block the exit from the test until the batch system marks it as finished.
-\begin{figure}
+\subsection{IOR Lustre scratch test}
+We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis.   One of our best practices is to provide a management level summary description for casual jenkins users who want to view the test but do not need to understand the jenkins configuration and execution details.  
+\begin{figure}[h!]
 \centering
 \includegraphics[width=0.5\textwidth]{IOR-bluewaters-descr}
 \caption{ IOR description in jenkins }
 \label{fig:IOR-bluewaters-descr}
 \end{figure}
+Where possible, tests build from source and exercise multiple user-facing system components such as: git for external connectivity and loading modules to test the defaults in the environment.  Where scripts on the SSH site are used, they are echoed and/or displayed with "cat -n" to make console output verbose and easy to debug in case of errors.  
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{IOR-configuration-sample}
+\caption{ IOR configuration sample }
+\label{fig:IOR-configuration-sample}
+\end{figure}
+
+The test is set to run as scheduled by Jenkins with a best-effort through our batch system.  The test blocks such that the next test will not start until the previous one has completed.  We employ a watchdog script to block the exit from the test until the batch system marks it as finished.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{IOR-watchdog-out}
+\caption{ IOR watchdog console output }
+\label{fig:IOR-watchdog-out}
+\end{figure}
+For tests that produce an interesting performance metric like IOR, we save that output to a file and use the Jenkins plotting feature to produce plots. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{IOR-plot}
+\caption{ IOR plot view }
+\label{fig:IOR-plot}
+\end{figure}
+A plot like this helps us with performance baselines and we can quickly react to changes in the software environment or filesystem configuration.
+
+\subsection{mdtest Lustre tests}
+We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis.  The mdtest metadata test is also run on the home and scratch filesystems to validate metadata server performance.  Both tests create plots that we review when checking recent overall filesystem performance.  These user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric.  Both of the tests are set to run as scheduled by Jenkins with a best-effort through our batch system.  The tests block such that the next test will not start until the previous one has completed through the batch system.  We employ a watchdog script to block the exit from the test until the batch system marks it as finished.
 
 
 
