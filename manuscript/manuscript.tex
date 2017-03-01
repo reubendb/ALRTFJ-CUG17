@@ -123,6 +123,12 @@ Performance; Benchmarking; Computer architecture
 \label{sec:results}
 \subsection{filesystem tests}
 We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis.  The mdtest metadata test is also run on the home and scratch filesystems to validate metadata server performance.  Both tests create plots that we review when checking recent overall filesystem performance.  These user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric.  Both of the tests are set to run as scheduled by Jenkins with a best-effort through our batch system.  The tests block such that the next test will not start until the previous one has completed through the batch system.  We employ a watchdog script to block the exit from the test until the batch system marks it as finished.
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{IOR-bluewaters-descr}
+\caption{ IOR description in jenkins }
+\label{fig:IOR-bluewaters-descr}
+\end{figure}
 
 
 
