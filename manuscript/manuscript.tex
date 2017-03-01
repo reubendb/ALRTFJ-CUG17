@@ -123,8 +123,8 @@ Performance; Benchmarking; Computer architecture
 \section{Use Cases}
 \label{sec:results}
 \subsection{IOR Lustre scratch test}
-We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis.   One of our best practices is to provide a management level summary description for casual jenkins users who want to view the test but do not need to understand the jenkins configuration and execution details.  
-\begin{figure}[h!]
+We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis. The test is scaled to provide representative performance numbers for a typical small application while not creating issues with other jobs or the filesystem at large.  One of our best practices is to provide a management level summary description for casual jenkins users who want to view the test but do not need to understand the jenkins configuration and execution details.  
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{IOR-bluewaters-descr}
 \caption{ IOR description in jenkins }
@@ -157,8 +157,21 @@ For tests that produce an interesting performance metric like IOR, we save that 
 A plot like this helps us with performance baselines and we can quickly react to changes in the software environment or filesystem configuration.
 
 \subsection{mdtest Lustre tests}
-We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis.  The mdtest metadata test is also run on the home and scratch filesystems to validate metadata server performance.  Both tests create plots that we review when checking recent overall filesystem performance.  These user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric.  Both of the tests are set to run as scheduled by Jenkins with a best-effort through our batch system.  The tests block such that the next test will not start until the previous one has completed through the batch system.  We employ a watchdog script to block the exit from the test until the batch system marks it as finished.
+The mdtest metadata test is run on the home and scratch filesystems to validate metadata server performance.  The IOR and mdtest user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric.  
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{mdtest-plot}
+\caption{ mdtest plot view }
+\label{fig:mdtest-plot}
+\end{figure}
 
+An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties.  E-mail for unstable builds will cause an E-mail every time the test state changes (from successful to failing and again when back to successful ).
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{mdtest-config-email}
+\caption{ mdtest email configuration }
+\label{fig:mdtest-config-email}
+\end{figure}
 
 
 \section{Conclusion}
