@@ -1,0 +1,168 @@
+
+
+\documentclass[10pt, conference, compsocconf]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{algorithmic,listings}
+\lstset{language=C,basicstyle=\small\ttfamily, basewidth=0.51em}
+\usepackage{url}
+\usepackage{tabularx}
+\usepackage{subfig}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\graphicspath{{figures/}}
+\pagestyle{plain}
+\begin{document}
+
+
+\title{Application-Level Regression Testing Framework using Jenkins}
+
+
+% author names and affiliations
+% use a multiple column layout for up to two different
+% affiliations
+
+
+% conference papers do not typically use \thanks and this command
+% is locked out in conference mode. If really needed, such as for
+% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
+% after \documentclass
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+%
+\author{\IEEEauthorblockN{Author1, Author2, Galen Arnold}
+%xxxx\IEEEauthorrefmark{3} and
+%xxxx\IEEEauthorrefmark{4}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}National Institute for Computational Science\\
+National Institute for Computational Sciences\\
+The University of Tennessee, Knoxville, TN 37996\\
+\{email1,email2,email3\}@domain.edu}
+%\IEEEauthorblockA{\IEEEauthorrefmark{4}Electrical Engineering and Computer Science Department\\University of Tennessee, Knoxville, TN 37996\\xx@eecs.utk.edu}
+%}
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+% make the title area
+\maketitle
+\thispagestyle{plain}
+
+\begin{abstract}
+This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. We evaluated test frameworks such as Inca [1] and Jenkins [2]. Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
+
+Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with passwordless access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. These are full end to end functionality testing of the programming environment, queueing system, license servers and provide historical metrics to quickly detect regressions.
+
+In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. The deployment of Jenkins allow us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Performance; Benchmarking; Computer architecture
+\end{IEEEkeywords}
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+\section{Motivation}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{example}
+\caption{This is an example figure with its caption.}
+\label{fig:example}
+\end{figure}
+
+\begin{lstlisting}[float,frame=tb,captionpos=t,language=bash,caption={Apache Configuration Example}, label=lst:apacheconfig]
+
+# First, we configure the "default" to be a very 
+# restrictive set of features.  
+#
+<Directory />
+    Options FollowSymLinks
+    AllowOverride None  
+</Directory>
+
+\end{lstlisting}
+
+\section{Jenkins Configuration}
+\label{sec:JenkinsConfiguration}
+
+\subsection{Introduction to Jenkins}
+\subsection{Master-Node Configuration}
+\subsection{Accessing Login Nodes}
+
+
+\section{Authentication and Authorization}
+\label{sec:AuthenticationAuthorization}
+
+\subsection{Security Considerations}
+\subsection{Configuration Choices}
+
+\section{Anatomy of A Test}
+\label{sec:TestAnatomy}
+
+
+\section{SWTools Integration}
+\label{sec:SWToolsIntegration}
+
+
+\section{Use Cases}
+\label{sec:results}
+\begin{filesytem tests}
+We created Jenkins tests to run the IOR MPI parallel filesystem test to run at a modest scale and validate filesystem functionality and performance for the scratch filesystem on a periodic basis.  The mdtest metadata test is also run on the home and scratch filesystems to validate metadata server performance.  Both tests create plots that we review when checking recent overall filesystem performance.  These user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric.  Both of the tests are set to run as scheduled by Jenkins with a best-effort through our batch system.  The tests block such that the next test will not start until the previous one has completed through the batch system.  We employ a watchdog script to block the exit from the test until the batch system marks it as finished.
+\end{filesystem tests}
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+% use section* for acknowledgement
+\section*{Acknowledgment}
+This research used resources at the National Institute for Computational Sciences, funded by the National Science Foundation (NSF).
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+\IEEEtriggercmd{\enlargethispage{-2in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+
+%\begin{thebibliography}{9}
+
+%\bibliographystyle{IEEEtran}
+%\bibliographystyle{unsrt}
+%\bibliography{references}
+
+%\end{thebibliography}
+
+% that's all folks
+\end{document}
