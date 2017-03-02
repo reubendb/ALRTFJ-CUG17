@@ -134,6 +134,29 @@ Where possible, tests build from source and exercise multiple user-facing system
 
 The test is set to run as scheduled by Jenkins with a best-effort through our batch system.  The test blocks such that the next test will not start until the previous one has completed.  We employ a watchdog script to block the exit from the test until the batch system marks it as finished.
 
+\begin{lstlisting}[float,frame=tb,captionpos=t,language=bash,caption={pbs/torque watchdog script}, label=lst:watchdog]
+#!/bin/bash
+echo "=== RUNNING $0 ==="
+if [ $# -lt 1 ]
+then
+  echo "$0: missing argument for jobid"
+  exit 1
+fi
+while true
+do
+	MYQSTAT=`qstat $1`
+	if test "$MYQSTAT" = ""
+        then
+		echo $1 finished
+		exit
+	else
+		DATE=`date`
+		echo "$DATE: waiting for $1 to finish"
+	fi
+	sleep 5m
+done
+\end{lstlisting}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{IOR-watchdog-out}
@@ -166,6 +189,14 @@ An additional best practice is to enable E-mail Notifications to the test author
 \label{fig:mdtest-config-email}
 \end{figure}
 
+\subsection{special projects}
+The tabs display of our Jenkins instance is used to group tests and we add tabs for special projects.   For example we clone existing tests for evaluating a new software stack on our test login node.   Our test rack has a separate set of tests from our production system and is used as our Jenkins test development area.  The sustained petascale performance benchmarks are in their own tab since they can run at scale and are only run on-demand (not scheduled by Jenkins ).
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{tabs-display}
+\caption{ tabs for project areas }
+\label{fig:tabs-display}
+\end{figure}
 
 \section{Conclusion}
 \label{sec:conclusion}
