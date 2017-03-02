@@ -127,7 +127,6 @@ HostbasedAuthentication yes
 Listen 443
 <VirtualHost _default_:443>
 SSLSessionCache         shmcb:/var/cache/mod_ssl/scache
-(512000) Reuben how you cache the opt?
 SSLSessionCacheTimeout  300
 ServerName bwjenkins.ncsa.illinois.edu:443
  # -- The following sets ReverseProxy for Jenkins
@@ -243,6 +242,15 @@ An additional best practice is to enable E-mail Notifications to the test author
 \includegraphics[width=0.5\textwidth]{mdtest-config-email}
 \caption{ mdtest email configuration }
 \label{fig:mdtest-config-email}
+\end{figure}
+
+\subsection{filesystem dashboard}
+Our Jenkins instance is a source of information for a filesystem dashboard display we maintain in our wiki.  The http:// urls for the plot images are shown on the dashboard and provide a recent-time display of filesystem metrics from a user point of view.  We add a Jenkins test to track the response time of /bin/ls on the login nodes--a reasonable metric of metadata server health and also the number one issue reported by users when we are having filesystem issues.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{wiki-dashboard}
+\caption{ filesystem dashboard displaying multiple Jenkins plots }
+\label{fig:wiki-dashboard}
 \end{figure}
 
 \subsection{special projects}
