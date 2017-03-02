@@ -9,6 +9,7 @@
 \usepackage{tabularx}
 \usepackage{subfig}
 \usepackage{float}
+\usepackage{underscore}
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
@@ -103,6 +104,61 @@ Performance; Benchmarking; Computer architecture
 \label{sec:AuthenticationAuthorization}
 
 \subsection{Security Considerations}
+Blue Waters is an OTP only restricted access system. Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with passwordless access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restricting access to the physical VM and Jenkins GUI (bwjenkins) utilizing iptables, SSL and OTP. The VM allows restricted host-based ssh (port 22) access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. We setup reverse proxy to run Jenkins behind apache/http with SSL for access to the administrative console. All the configuration is in /etc/httpd/config.d/ssl.conf. An anonymous GUI view was setup (config file snippets below)
+
+\begin{lstlisting}
+/etc/ssh/sshd_config:
+Match Host bwbh1.ncsa.illinois.edu,
+bwbh2.ncsa.illinois.edu
+HostbasedAuthentication yes
+
+
+/etc/sysconfig/iptables:
+-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
+-p tcp --dport 22 -j ACCEPT
+-A INPUT -s 172.16.0.0/15 -m state --state NEW -m tcp 
+-p tcp --dport 22 -j ACCEPT *delete maybe*
+-A INPUT  -m state --state NEW -m tcp -p tcp --dport 80 
+-j ACCEPT
+-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
+-p tcp --dport 443 -j ACCEPT
+
+/etc/httpd/config.d/ssl.conf:
+Listen 443
+<VirtualHost _default_:443>
+SSLSessionCache         shmcb:/var/cache/mod_ssl/scache
+(512000) Reuben how you cache the opt?
+SSLSessionCacheTimeout  300
+ServerName bwjenkins.ncsa.illinois.edu:443
+ # -- The following sets ReverseProxy for Jenkins
+  ProxyRequests       Off
+  ProxyPreserveHost   On
+  AllowEncodedSlashes On
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+  </Proxy>
+  ProxyPass       / http://localhost:8080/ nocanon
+  ProxyPassReverse / http://localhost:8080/
+  ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
+  RequestHeader set X-Forwarded-Proto "https"
+  RequestHeader set X-Forwarded-Port "443"
+
+  DefineExternalAuth pwauth+session pipe /usr/local/bin/
+  pwauth+session
+  <LocationMatch / > 
+    AuthType Basic
+    AuthBasicProvider external
+    AuthName "NCSA RSA OTP login" 
+    AuthExternal pwauth+session
+    require valid-user
+    
+    RequestHeader unset "X-Forwarded-User"
+    RequestHeader set "X-Forwarded-User" (REMOTE_USER)
+
+  </LocationMatch>
+\end{lstlisting}
+
 \subsection{Configuration Choices}
 
 \section{Anatomy of A Test}
