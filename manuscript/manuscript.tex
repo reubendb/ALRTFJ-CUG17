@@ -161,6 +161,36 @@ ServerName bwjenkins.ncsa.illinois.edu:443
   </LocationMatch>
 \end{lstlisting}
 
+\subsection{LDAP with Jenkins}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{LDAP-Jenkins}
+\caption{ Use LDAP with Jenkins }
+\label{fig:LDAP-Jenkins}
+\end{figure}
+
+From the console view, select Manage Jenkins, select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.\\
+\\
+My first stab at this failed as an anonymous connection to our LDAP because we are using a local CA.
+WARNING: Failed to search LDAP for username, 
+sun.security.provider.certpath.SunCertPathBuilderException:
+unable to find valid certification path to requested target\\
+\\
+Had to add our certificate to the keystore:
+/usr/java/default/jre/bin/keytool -list -keystore cacerts -imle /etc/openldap/cacerts/cacert.pem
+Enter keystore password: Trust this certificate? [no]:  yes\\
+Certificate was added to keystore
+
+\subsection{Configure Global Security}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Configure-Global-Security}
+\caption{ Configure Global Security }
+\label{fig:Configure-Global-Security}
+\end{figure}
+We are allowing access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting others jobs. 
+
 \section{Anatomy of A Test}
 \label{sec:TestAnatomy}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  2 MAR 2017 09:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  2 MAR 2017 21:23
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -247,21 +247,25 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks20
 \@floatcapt=\box30
 )
+(/usr/local/texlive/2016/texmf-dist/tex/latex/underscore/underscore.sty
+Package: underscore 2006/09/13
+LaTeX Info: Redefining \_ on input line 42.
+)
 (./manuscript.aux)
 \openout1 = `manuscript.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
 
 (/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -329,14 +333,14 @@ Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 53.
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 53.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 54.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 54.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 54.
 Missing character: There is no â in font ptmb7t!
 Missing character: There is no € in font ptmb7t!
 Missing character: There is no ™ in font ptmb7t!
@@ -353,114 +357,226 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 (/usr/local/texlive/2016/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 82.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 83.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <9> not available
-(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 84.
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 85.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-<figures/IOR-bluewaters-descr.png, id=1, 1266.7325pt x 711.65875pt>
-File: figures/IOR-bluewaters-descr.png Graphic file (type png)
-
-<use figures/IOR-bluewaters-descr.png>
-Package pdftex.def Info: figures/IOR-bluewaters-descr.png used on input line 12
-2.
-(pdftex.def)             Requested size: 252.94499pt x 142.10118pt.
-
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 122--123
- [][] 
- []
-
-[1{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+ [1{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-<figures/IOR-configuration-sample.png, id=15, 1266.7325pt x 711.65875pt>
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 120--121
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (8.53603pt too wide) in paragraph at lines 124--125
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 126--127
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (8.53603pt too wide) in paragraph at lines 132--133
+[][][][][][][][][][][][][][][] 
+ []
+
+LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 135.
+
+Overfull \hbox (13.12598pt too wide) in paragraph at lines 145--146
+[][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (13.12598pt too wide) in paragraph at lines 149--150
+[][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 159--161
+[][][][][][][][][][][][][][][][][][] 
+ []
+
+<figures/LDAP-Jenkins.png, id=13, 757.83125pt x 618.31pt>
+File: figures/LDAP-Jenkins.png Graphic file (type png)
+
+<use figures/LDAP-Jenkins.png>
+Package pdftex.def Info: figures/LDAP-Jenkins.png used on input line 168.
+(pdftex.def)             Requested size: 252.94499pt x 206.37328pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 168--169
+ [][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--184
+
+ []
+
+
+Underfull \hbox (badness 4531) in paragraph at lines 173--184
+\OT1/ptm/m/n/10 to our LDAP be-cause we are us-ing a lo-cal CA.
+ []
+
+
+Underfull \hbox (badness 6741) in paragraph at lines 173--184
+\OT1/ptm/m/n/10 WARN-ING: Failed to search LDAP for user-name,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--184
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--184
+\OT1/ptm/m/n/10 Had to add our cer-tifi-cate to the key-store:
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--184
+\OT1/ptm/m/n/10 /us-r/-java/de-fault-/jre/bin/key-tool -list -keystore cac-erts
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--184
+\OT1/ptm/m/n/10 -imle /etc/openl-dap/-cac-ert-s/-cac-ert.pem En-ter key-store
+ []
+
+<figures/Configure-Global-Security.png, id=15, 1044.90375pt x 573.14125pt>
+File: figures/Configure-Global-Security.png Graphic file (type png)
+
+<use figures/Configure-Global-Security.png>
+Package pdftex.def Info: figures/Configure-Global-Security.png used on input li
+ne 188.
+(pdftex.def)             Requested size: 252.94499pt x 138.73734pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 188--189
+ [][] 
+ []
+
+[2 <./figures/LDAP-Jenkins.png> <./figures/Configure-Global-Security.png>]
+<figures/IOR-bluewaters-descr.png, id=22, 1266.7325pt x 711.65875pt>
+File: figures/IOR-bluewaters-descr.png Graphic file (type png)
+
+<use figures/IOR-bluewaters-descr.png>
+Package pdftex.def Info: figures/IOR-bluewaters-descr.png used on input line 20
+8.
+(pdftex.def)             Requested size: 252.94499pt x 142.10118pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 208--209
+ [][] 
+ []
+
+<figures/IOR-configuration-sample.png, id=23, 1266.7325pt x 711.65875pt>
 File: figures/IOR-configuration-sample.png Graphic file (type png)
 
 <use figures/IOR-configuration-sample.png>
 Package pdftex.def Info: figures/IOR-configuration-sample.png used on input lin
-e 130.
+e 216.
 (pdftex.def)             Requested size: 252.94499pt x 142.10118pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 130--131
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 216--217
  [][] 
  []
 
-LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 139.
 
-Overfull \hbox (3.94608pt too wide) in paragraph at lines 154--155
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 240--241
 [][][][][][][][][][][][][][][][][][][] 
  []
 
-<figures/IOR-watchdog-out.png, id=16, 1266.7325pt x 711.65875pt>
+<figures/IOR-watchdog-out.png, id=24, 1266.7325pt x 711.65875pt>
 File: figures/IOR-watchdog-out.png Graphic file (type png)
 
 <use figures/IOR-watchdog-out.png>
-Package pdftex.def Info: figures/IOR-watchdog-out.png used on input line 162.
+Package pdftex.def Info: figures/IOR-watchdog-out.png used on input line 248.
 (pdftex.def)             Requested size: 252.94499pt x 142.10118pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 162--163
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 248--249
  [][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-<figures/IOR-plot.png, id=17, 1364.09625pt x 951.555pt>
+ [3 <./figures/IOR-bluewaters-descr.png> <./figures/IOR-configuration-sample.pn
+g>]
+<figures/IOR-plot.png, id=30, 1364.09625pt x 951.555pt>
 File: figures/IOR-plot.png Graphic file (type png)
 
 <use figures/IOR-plot.png>
-Package pdftex.def Info: figures/IOR-plot.png used on input line 169.
+Package pdftex.def Info: figures/IOR-plot.png used on input line 255.
 (pdftex.def)             Requested size: 252.94499pt x 176.44147pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 169--170
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 255--256
+ [][] 
+ []
+
+<figures/mdtest-plot.png, id=31, 1402.23875pt x 885.3075pt>
+File: figures/mdtest-plot.png Graphic file (type png)
+
+<use figures/mdtest-plot.png>
+Package pdftex.def Info: figures/mdtest-plot.png used on input line 265.
+(pdftex.def)             Requested size: 252.94499pt x 159.68619pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 265--266
+ [][] 
+ []
+
+
+Underfull \vbox (badness 5954) has occurred while \output is active []
+
+
+<figures/mdtest-config-email.png, id=32, 1189.44376pt x 752.8125pt>
+File: figures/mdtest-config-email.png Graphic file (type png)
+
+<use figures/mdtest-config-email.png>
+Package pdftex.def Info: figures/mdtest-config-email.png used on input line 273
+.
+(pdftex.def)             Requested size: 252.94499pt x 160.08253pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 273--274
+ [][] 
+ []
+
+<figures/wiki-dashboard.png, id=33, 1304.875pt x 886.31125pt>
+File: figures/wiki-dashboard.png Graphic file (type png)
+
+<use figures/wiki-dashboard.png>
+Package pdftex.def Info: figures/wiki-dashboard.png used on input line 282.
+(pdftex.def)             Requested size: 252.94499pt x 171.80893pt.
+
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 282--283
  [][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [2 <./figures/IOR-bluewaters-descr.png> <./figures/IOR-configuration-sample.pn
-g> <./figures/IOR-watchdog-out.png>]
-<figures/mdtest-plot.png, id=25, 1402.23875pt x 885.3075pt>
-File: figures/mdtest-plot.png Graphic file (type png)
-
-<use figures/mdtest-plot.png>
-Package pdftex.def Info: figures/mdtest-plot.png used on input line 179.
-(pdftex.def)             Requested size: 252.94499pt x 159.68619pt.
-
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 179--180
- [][] 
- []
-
-<figures/mdtest-config-email.png, id=26, 1189.44376pt x 752.8125pt>
-File: figures/mdtest-config-email.png Graphic file (type png)
-
-<use figures/mdtest-config-email.png>
-Package pdftex.def Info: figures/mdtest-config-email.png used on input line 187
-.
-(pdftex.def)             Requested size: 252.94499pt x 160.08253pt.
-
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 187--188
- [][] 
- []
-
-<figures/tabs-display.png, id=27, 1402.23875pt x 885.3075pt>
+ [4 <./figures/IOR-watchdog-out.png> <./figures/IOR-plot.png> <./figures/mdtest
+-plot.png> <./figures/mdtest-config-email.png>]
+<figures/tabs-display.png, id=41, 1402.23875pt x 885.3075pt>
 File: figures/tabs-display.png Graphic file (type png)
 
 <use figures/tabs-display.png>
-Package pdftex.def Info: figures/tabs-display.png used on input line 196.
+Package pdftex.def Info: figures/tabs-display.png used on input line 291.
 (pdftex.def)             Requested size: 252.94499pt x 159.68619pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 196--197
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 291--292
  [][] 
  []
 
@@ -475,33 +591,31 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[3 <./figures/IOR-plot.png> <./figures/mdtest-plot.png> <./figures/mdtest-confi
-g-email.png> <./figures/tabs-display.png>] (./manuscript.aux)
+[5
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+ <./figures/wiki-dashboard.png> <./figures/tabs-display.png>]
+(./manuscript.aux) ) 
 Here is how much of TeX's memory you used:
- 5225 strings out of 493014
- 83448 string characters out of 6133351
- 173598 words of memory out of 5000000
- 8701 multiletter control sequences out of 15000+600000
+ 5470 strings out of 493014
+ 86792 string characters out of 6133351
+ 219693 words of memory out of 5000000
+ 8939 multiletter control sequences out of 15000+600000
  34124 words of font info for 68 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
- 44i,8n,49p,1242b,1168s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
-xlive/2016/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/20
-16/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2016/texmf
--dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2016/texmf-dist/f
-onts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1
-/urw/times/utmbi8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/time
-s/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.
-pfb>
-Output written on manuscript.pdf (3 pages, 1156940 bytes).
+ 44i,8n,49p,1242b,1166s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r
+.enc}</usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
+pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></us
+r/local/texlive/2016/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/
+texlive/2016/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive
+/2016/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texm
+f-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2016/texmf-dist/fo
+nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/
+urw/times/utmri8a.pfb>
+Output written on manuscript.pdf (5 pages, 1648095 bytes).
 PDF statistics:
- 62 PDF objects out of 1000 (max. 8388607)
- 34 compressed objects within 1 object stream
+ 74 PDF objects out of 1000 (max. 8388607)
+ 38 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 51 words of extra memory for PDF output out of 10000 (max. 10000000)
 
