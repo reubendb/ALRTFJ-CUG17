@@ -34,13 +34,15 @@
 % for over three affiliations, or if they all won't fit within the width
 % of the page, use this alternative format:
 %
-\author{\IEEEauthorblockN{Author1, Timothy Bouvet, Galen Arnold}
+\author{\IEEEauthorblockN{Timothy Bouvet, Reuben Budiardja, Galen Arnold}
 %xxxx\IEEEauthorrefmark{3} and
 %xxxx\IEEEauthorrefmark{4}}
 %\IEEEauthorblockA{\IEEEauthorrefmark{1}National Institute for Computational Science\\
+National Center for Supercomputing Applications\\
+University of Illinois at Urbana-Champaign, 61801\\
 National Institute for Computational Sciences\\
 The University of Tennessee, Knoxville, TN 37996\\
-\{email1,tbouvet@illinois.edu,gwarnold@illinois.edu\}@domain.edu}
+\{tbouvet@illinois.edu,reubendb@utk.edu,gwarnold@illinois.edu\}}
 %\IEEEauthorblockA{\IEEEauthorrefmark{4}Electrical Engineering and Computer Science Department\\University of Tennessee, Knoxville, TN 37996\\xx@eecs.utk.edu}
 %}
 
@@ -55,11 +57,11 @@ The University of Tennessee, Knoxville, TN 37996\\
 \thispagestyle{plain}
 
 \begin{abstract}
-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. We evaluated test frameworks such as Inca [1] and Jenkins [2]. Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
+This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. We evaluated test frameworks such as Inca [1] and Jenkins [2]. Jenkins was chosen for its versatility, large user base, and multitude of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
 
-Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with pass-wordless access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. These are full end to end functionality testing of the programming environment, queueing system, license servers and provide historical metrics to quickly detect regressions.
+Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. These are full end to end functionality tests of the programming environment, queueing system, license servers and they provide historical metrics to quickly detect regressions.
 
-In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. The deployment of Jenkins allow us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
+In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. The deployment of Jenkins allows us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -78,19 +80,6 @@ Performance; Benchmarking; Computer architecture
 \IEEEpeerreviewmaketitle
 
 \section{Motivation}
-
-
-\begin{lstlisting}[float,frame=tb,captionpos=t,language=bash,caption={Apache Configuration Example}, label=lst:apacheconfig]
-
-# First, we configure the "default" to be a very 
-# restrictive set of features.  
-#
-<Directory />
-    Options FollowSymLinks
-    AllowOverride None  
-</Directory>
-
-\end{lstlisting}
 
 \section{Jenkins Configuration}
 \label{sec:JenkinsConfiguration}
