@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  2 MAR 2017 21:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  3 MAR 2017 09:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -484,10 +484,10 @@ File: figures/IOR-configuration-sample.png Graphic file (type png)
 
 <use figures/IOR-configuration-sample.png>
 Package pdftex.def Info: figures/IOR-configuration-sample.png used on input lin
-e 216.
+e 215.
 (pdftex.def)             Requested size: 252.94499pt x 142.10118pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 216--217
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 215--216
  [][] 
  []
 
@@ -495,7 +495,7 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 216--217
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Overfull \hbox (3.94608pt too wide) in paragraph at lines 240--241
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 237--238
 [][][][][][][][][][][][][][][][][][][] 
  []
 
@@ -503,10 +503,10 @@ Overfull \hbox (3.94608pt too wide) in paragraph at lines 240--241
 File: figures/IOR-watchdog-out.png Graphic file (type png)
 
 <use figures/IOR-watchdog-out.png>
-Package pdftex.def Info: figures/IOR-watchdog-out.png used on input line 248.
+Package pdftex.def Info: figures/IOR-watchdog-out.png used on input line 245.
 (pdftex.def)             Requested size: 252.94499pt x 142.10118pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 248--249
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 245--246
  [][] 
  []
 
@@ -519,10 +519,10 @@ g>]
 File: figures/IOR-plot.png Graphic file (type png)
 
 <use figures/IOR-plot.png>
-Package pdftex.def Info: figures/IOR-plot.png used on input line 255.
+Package pdftex.def Info: figures/IOR-plot.png used on input line 256.
 (pdftex.def)             Requested size: 252.94499pt x 176.44147pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 255--256
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 256--257
  [][] 
  []
 
@@ -530,26 +530,22 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 255--256
 File: figures/mdtest-plot.png Graphic file (type png)
 
 <use figures/mdtest-plot.png>
-Package pdftex.def Info: figures/mdtest-plot.png used on input line 265.
+Package pdftex.def Info: figures/mdtest-plot.png used on input line 266.
 (pdftex.def)             Requested size: 252.94499pt x 159.68619pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 265--266
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 266--267
  [][] 
  []
-
-
-Underfull \vbox (badness 5954) has occurred while \output is active []
-
 
 <figures/mdtest-config-email.png, id=32, 1189.44376pt x 752.8125pt>
 File: figures/mdtest-config-email.png Graphic file (type png)
 
 <use figures/mdtest-config-email.png>
-Package pdftex.def Info: figures/mdtest-config-email.png used on input line 273
+Package pdftex.def Info: figures/mdtest-config-email.png used on input line 274
 .
 (pdftex.def)             Requested size: 252.94499pt x 160.08253pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 273--274
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 274--275
  [][] 
  []
 
@@ -557,10 +553,10 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 273--274
 File: figures/wiki-dashboard.png Graphic file (type png)
 
 <use figures/wiki-dashboard.png>
-Package pdftex.def Info: figures/wiki-dashboard.png used on input line 282.
+Package pdftex.def Info: figures/wiki-dashboard.png used on input line 283.
 (pdftex.def)             Requested size: 252.94499pt x 171.80893pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 282--283
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 283--284
  [][] 
  []
 
@@ -573,10 +569,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: figures/tabs-display.png Graphic file (type png)
 
 <use figures/tabs-display.png>
-Package pdftex.def Info: figures/tabs-display.png used on input line 291.
+Package pdftex.def Info: figures/tabs-display.png used on input line 292.
 (pdftex.def)             Requested size: 252.94499pt x 159.68619pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 291--292
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 292--293
  [][] 
  []
 
@@ -596,10 +592,10 @@ Before submitting the final camera ready copy, remember to:
  <./figures/wiki-dashboard.png> <./figures/tabs-display.png>]
 (./manuscript.aux) ) 
 Here is how much of TeX's memory you used:
- 5470 strings out of 493014
- 86792 string characters out of 6133351
- 219693 words of memory out of 5000000
- 8939 multiletter control sequences out of 15000+600000
+ 5480 strings out of 493014
+ 86920 string characters out of 6133351
+ 219701 words of memory out of 5000000
+ 8949 multiletter control sequences out of 15000+600000
  34124 words of font info for 68 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
  44i,8n,49p,1242b,1166s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -612,7 +608,7 @@ texlive/2016/texmf-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive
 f-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2016/texmf-dist/fo
 nts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/
 urw/times/utmri8a.pfb>
-Output written on manuscript.pdf (5 pages, 1648095 bytes).
+Output written on manuscript.pdf (5 pages, 1648762 bytes).
 PDF statistics:
  74 PDF objects out of 1000 (max. 8388607)
  38 compressed objects within 1 object stream
