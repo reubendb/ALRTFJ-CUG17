@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  4 MAR 2017 21:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  5 MAR 2017 23:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -491,13 +491,12 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 198--199
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-<figures/swtools-lammps-jenkins.png, id=22, 780.9175pt x 609.27625pt>
-File: figures/swtools-lammps-jenkins.png Graphic file (type png)
+<figures/swtools-lammps.png, id=22, 761.84625pt x 376.40625pt>
+File: figures/swtools-lammps.png Graphic file (type png)
 
-<use figures/swtools-lammps-jenkins.png>
-Package pdftex.def Info: figures/swtools-lammps-jenkins.png used on input line 
-206.
-(pdftex.def)             Requested size: 252.94499pt x 197.34306pt.
+<use figures/swtools-lammps.png>
+Package pdftex.def Info: figures/swtools-lammps.png used on input line 206.
+(pdftex.def)             Requested size: 252.94499pt x 124.97258pt.
 
 Overfull \hbox (9.03374pt too wide) in paragraph at lines 206--207
  [][] 
@@ -516,7 +515,7 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 217--218
  []
 
 [3 <./figures/Configure-Global-Security.png> <./figures/swtools-Jenkins.png> <.
-/figures/swtools-lammps-jenkins.png>]
+/figures/swtools-lammps.png>]
 <figures/IOR-configuration-sample.png, id=30, 1266.7325pt x 711.65875pt>
 File: figures/IOR-configuration-sample.png Graphic file (type png)
 
@@ -561,12 +560,7 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 265--266
  [][] 
  []
 
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [4 <./figures/IOR-bluewaters-descr.png> <./figures/IOR-configuration-sample.pn
-g> <./figures/IOR-watchdog-out.png>]
-<figures/mdtest-plot.png, id=39, 1008.76875pt x 709.65125pt>
+<figures/mdtest-plot.png, id=33, 1008.76875pt x 709.65125pt>
 File: figures/mdtest-plot.png Graphic file (type png)
 
 <use figures/mdtest-plot.png>
@@ -577,7 +571,9 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 275--276
  [][] 
  []
 
-<figures/mdtest-config-email.png, id=40, 1006.76125pt x 318.18875pt>
+[4 <./figures/IOR-bluewaters-descr.png> <./figures/IOR-configuration-sample.png
+> <./figures/IOR-watchdog-out.png> <./figures/IOR-plot.png>]
+<figures/mdtest-config-email.png, id=41, 1006.76125pt x 318.18875pt>
 File: figures/mdtest-config-email.png Graphic file (type png)
 
 <use figures/mdtest-config-email.png>
@@ -589,7 +585,7 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 283--284
  [][] 
  []
 
-<figures/wiki-dashboard.png, id=41, 956.57375pt x 836.12375pt>
+<figures/wiki-dashboard.png, id=42, 956.57375pt x 836.12375pt>
 File: figures/wiki-dashboard.png Graphic file (type png)
 
 <use figures/wiki-dashboard.png>
@@ -600,7 +596,7 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 292--293
  [][] 
  []
 
-<figures/tabs-display.png, id=42, 979.66pt x 246.9225pt>
+<figures/tabs-display.png, id=43, 979.66pt x 246.9225pt>
 File: figures/tabs-display.png Graphic file (type png)
 
 <use figures/tabs-display.png>
@@ -611,8 +607,7 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 301--302
  [][] 
  []
 
-[5 <./figures/IOR-plot.png> <./figures/mdtest-plot.png> <./figures/mdtest-confi
-g-email.png> <./figures/wiki-dashboard.png>]
+
 Underfull \hbox (badness 10000) in paragraph at lines 323--325
 []\OT1/ptm/m/n/10 [1] http://inca.sdsc.edu/ Inca Mon-i-tor-ing: pe-ri-odic,
  []
@@ -633,21 +628,20 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[6
-
- <./figures/tabs-display.png>] (./manuscript.aux)
+[5 <./figures/mdtest-plot.png> <./figures/mdtest-config-email.png> <./figures/w
+iki-dashboard.png> <./figures/tabs-display.png>] (./manuscript.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 5479 strings out of 493014
- 87113 string characters out of 6133351
- 192788 words of memory out of 5000000
- 8946 multiletter control sequences out of 15000+600000
+ 5480 strings out of 493014
+ 87093 string characters out of 6133351
+ 192315 words of memory out of 5000000
+ 8947 multiletter control sequences out of 15000+600000
  34124 words of font info for 68 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
- 44i,8n,49p,1241b,1404s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,8n,49p,1241b,1498s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
 xlive/2016/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/20
@@ -657,10 +651,10 @@ onts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1
 /urw/times/utmbi8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/time
 s/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
-Output written on manuscript.pdf (6 pages, 1308538 bytes).
+Output written on manuscript.pdf (5 pages, 1277224 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 40 compressed objects within 1 object stream
+ 78 PDF objects out of 1000 (max. 8388607)
+ 38 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
