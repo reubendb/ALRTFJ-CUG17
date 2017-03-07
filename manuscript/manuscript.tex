@@ -80,13 +80,21 @@ Performance; Benchmarking; Computer architecture
 \IEEEpeerreviewmaketitle
 
 \section{Motivation}
-
+Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service.
 \section{Jenkins Configuration}
 \label{sec:JenkinsConfiguration}
 
 \subsection{Introduction to Jenkins}
+Jenkins [2] is a self-contained, open source automation server which can be used to automate all sorts of tasks such as building, testing, and deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with the Java Runtime Environment installed. 
+To install from rpm as root:
+wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+yum install jenkins
 \subsection{Master-Node Configuration}
+We added a standard user account to our cluster that will execute the Jenkins tests. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase was entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our TDS, production and development login nodes.   
+
 \subsection{Accessing Login Nodes}
+The ssh public key generated on Jenkins Server was deployed in the login node user account. The login node sshd_config was modified to allow Public Key Authentication from the Jenkins Server IP.     
 
 
 \section{Authentication and Authorization}
@@ -96,7 +104,7 @@ Performance; Benchmarking; Computer architecture
 Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. Jenkins has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once you complete the sign up form, you have full admin access to the system.  This required us initially to test the deployment with our test and development (TDS) CRAY. This resulted in the following requirements. Restricted OTP access to the physical system that will host Jenkins. In addition, OTP only access to the Jenkins GUI command console that must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
 
 \subsection{Configuration Choices}
-Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with pass-wordless access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restricting access to the physical VM and Jenkins GUI (bwjenkins) utilizing iptables, SSL and OTP.  A reverse proxy was used to run Jenkins behind apache/http with SSL for access to the administrative console. All the configuration is in /etc/httpd/config.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. \\
+Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with pass-wordless access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restricting access to the physical VM and Jenkins GUI (bwjenkins) utilizing iptables, SSL and OTP.  A reverse proxy was used to run Jenkins behind apache/http with SSL for access to the administrative console. All the configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. \\
 (config file snippets below)
 
 \begin{lstlisting}
@@ -115,7 +123,7 @@ HostbasedAuthentication yes
 -A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 -p tcp --dport 443 -j ACCEPT
 
-/etc/httpd/config.d/ssl.conf:
+/etc/httpd/conf.d/ssl.conf:
 Listen 443
 <VirtualHost _default_:443>
 SSLSessionCache         shmcb:/var/cache/mod_ssl/scache
@@ -151,14 +159,12 @@ ServerName bwjenkins.ncsa.illinois.edu:443
 \end{lstlisting}
 
 \subsection{LDAP with Jenkins}
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{LDAP-Jenkins}
 \caption{ Use LDAP with Jenkins }
 \label{fig:LDAP-Jenkins}
 \end{figure}
-
 To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.\\
 \\
 My first stab at this failed as an anonymous connection to our LDAP because we are using a local CA.
@@ -182,11 +188,25 @@ We are allowing access by username and LDAP groups. The permissions can be scope
 
 \section{Anatomy of A Test}
 \label{sec:TestAnatomy}
-
+New software projects are required to be tested on our TDS and approved before deployment on Blue Waters. 
 
 \section{SWTools Integration}
 \label{sec:SWToolsIntegration}
+\subsection{SWTools with Jenkins}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{swtools-Jenkins}
+\caption{ Use SWTools with Jenkins }
+\label{fig:swtools-jenkins}
+\end{figure}
 
+\subsection{SWTools with Lammps}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{swtools-lammps}
+\caption{ SWTools with Lammps }
+\label{fig:swtools-lammps}
+\end{figure}
 
 \section{Use Cases}
 \label{sec:results}
@@ -299,6 +319,9 @@ This research used resources at the National Institute for Computational Science
 \IEEEtriggercmd{\enlargethispage{-2in}}
 
 % references section
+\section*{References}
+[1] http://inca.sdsc.edu/ Inca Monitoring: periodic, automated, user-level cyberinfrastructure testing
+[2] https://jenkins.io/ Jenkins: open source automation server written in Java
 
 % can use a bibliography generated by BibTeX as a .bbl file
 % BibTeX documentation can be easily obtained at:
