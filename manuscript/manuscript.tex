@@ -172,7 +172,7 @@ WARNING: Failed to search LDAP for username,
 sun.security.provider.certpath.SunCertPathBuilderException:
 unable to find valid certification path to requested target\\
 \\
-Had to add our certificate to the keystore:
+We had to add our certificate to the keystore:
 /usr/java/default/jre/bin/keytool -list -keystore cacerts -imle /etc/openldap/cacerts/cacert.pem
 Enter keystore password: Trust this certificate? [no]:  yes\\
 Certificate was added to keystore
@@ -184,7 +184,7 @@ Certificate was added to keystore
 \caption{ Configure Global Security }
 \label{fig:Configure-Global-Security}
 \end{figure}
-We are allowing access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting others jobs. 
+We are allowing access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting each other's jobs. 
 
 \section{Anatomy of A Test}
 \label{sec:TestAnatomy}
@@ -277,7 +277,7 @@ The mdtest metadata test is run on the home and scratch filesystems to validate 
 \label{fig:mdtest-plot}
 \end{figure}
 
-An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties.  Setting notifications for unstable builds will trigger an E-mail every time the test state changes (from successful to failing and again when back to successful ).
+An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties.  Setting notifications for unstable builds will trigger an E-mail every time the test state changes (from successful to failing and once again when successful ).
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{mdtest-config-email}
