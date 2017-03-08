@@ -323,6 +323,15 @@ The initial display tabs in our Jenkins instance are used to group tests and we 
 \label{fig:tabs-display}
 \end{figure}
 
+\section{Best Practices}
+\begin{itemize}
+\item Tests are developed on the JYC development rack and not assigned into a Jenkins tab until reviewed.
+\item Email notification is enabled for most tests and the field is always populated with a test owner.
+\item All tests contain a description that describes what is tested, resources required, scheduling frequency, and overall summary  to be readable by the management team.
+\item Log file count is limited in the test configuration to keep from filling filesystem space with verbose logs.
+\item Tests are coded to be more verbose than necessary so that failures can be isolated quickly and easily.
+\end{itemize}
+
 \section{Conclusion}
 \subsection{caveats}
 Transient errors with Jenkins sometimes occur--particularly with the Jenkins ssh subsystem.  It's not unusual to get failure rates of 1/100 from an ssh failure which is completely transient (immediately running the test again manually clears the issue on the dashboard).
