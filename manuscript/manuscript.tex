@@ -172,7 +172,7 @@ WARNING: Failed to search LDAP for username,
 sun.security.provider.certpath.SunCertPathBuilderException:
 unable to find valid certification path to requested target\\
 \\
-Had to add our certificate to the keystore:
+We had to add our certificate to the keystore:
 /usr/java/default/jre/bin/keytool -list -keystore cacerts -imle /etc/openldap/cacerts/cacert.pem
 Enter keystore password: Trust this certificate? [no]:  yes\\
 Certificate was added to keystore
@@ -184,11 +184,31 @@ Certificate was added to keystore
 \caption{ Configure Global Security }
 \label{fig:Configure-Global-Security}
 \end{figure}
-We are allowing access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting others jobs. 
+We are allowing access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting each other's jobs. 
 
 \section{Anatomy of A Test}
 \label{sec:TestAnatomy}
-New software projects are required to be tested on our TDS and approved before deployment on Blue Waters. 
+New software projects are required to be tested on our TDS and approved before deployment on Blue Waters and this is one of our key best practices.  Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab.  Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
+\subsection{test description}
+We require a description for each test to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
+\subsection{limits log files}
+The Jenkins test VM filled to capacity after the first few weeks of intensive use and an influx of several new tests that output long source code build detail.  We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
+\subsection{ssh to a login host}
+There are several target ssh hosts which may be selected from our instance: the test rack JYC, the main system, and the new software deployment login node within the main system.  None of our tests run locally within the Jenkins VM.
+\subsection{run shell commands}
+A test is composed of shell command and where possible we try to be as transparent with our test construction as possible.  We prefer commands in the Jenkins configuration over running a script in the filesystem on the remote ssh target.  Scripts that are remote run with verbose mode or are displayed via "cat -n" to save output to the Jenkins console log and make for simpler debugging when a test fails.
+\subsubsection{test completes on login node}
+Some tests run only on the ssh login node and return more or less immediately.  Examples include tests for batch system functionality, ssh functionality, and filesystem functionality.  These tests are very similar in style to unit tests which target a limited set of functionality.
+\subsubsection{test is submitted to batch system}
+More comprehensive tests typically build and run an application or benchmark through the batch system.  These tests exercise multiple aspects of the system: (filesystem, compilers and modules, high-speed network, external connectivity to the internet...).  They block to completion so that we do not overburden the batch system with tests.  Unlike tests that run entirely on a login node, completion time can be highly variable depending on the queue depth and available backfill windows for the batch system.
+\subsection{post test actions}
+\subsubsection{scp files back to Jenkins host}
+Most comprehensive tests produce output that we use when debugging a failed test.  They may also produce plot data.  These files are copied back to the Jenkins host so that they can be viewed and/or incorporated into the plot feature of Jenkins.
+\subsubsection{plots}
+Successful tests save plot files and contribute a new data point to a plot.  The Jenkins server accumulates the data as rows in a spreadsheet (under /var/lib/jenkins/jobs/ ) and plots them via the "Plots" link for a test.
+\subsection{email notification}
+When the state of a test changes, email notification is sent to the test owner.  As a best practice we also use the email notification as a method of tracking authorship and each test has an email owner even if notifications are disabled for the test.
+
 
 \section{SWTools Integration}
 \label{sec:SWToolsIntegration}
@@ -277,7 +297,7 @@ The mdtest metadata test is run on the home and scratch filesystems to validate 
 \label{fig:mdtest-plot}
 \end{figure}
 
-An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties.  Setting notifications for unstable builds will trigger an E-mail every time the test state changes (from successful to failing and again when back to successful ).
+An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties.  Setting notifications for unstable builds will trigger an E-mail every time the test state changes (from successful to failing and once again when successful ).
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{mdtest-config-email}
@@ -303,7 +323,20 @@ The initial display tabs in our Jenkins instance are used to group tests and we 
 \label{fig:tabs-display}
 \end{figure}
 
+\section{Best Practices}
+\begin{itemize}
+\item Tests are developed on the JYC development rack and not assigned into a Jenkins tab until reviewed.
+\item Email notification is enabled for most tests and the field is always populated with a test owner.
+\item All tests contain a description that describes what is tested, resources required, scheduling frequency, and overall summary  to be readable by the management team.
+\item Log file count is limited in the test configuration to keep from filling filesystem space with verbose logs.
+\item Tests are coded to be more verbose than necessary so that failures can be isolated quickly and easily.
+\end{itemize}
+
 \section{Conclusion}
+\subsection{reproducibility and regression testing}
+\subsection{rapid reaction}
+\subsection{caveats}
+Transient errors with Jenkins sometimes occur--particularly with the Jenkins ssh subsystem.  It's not unusual to get failure rates of 1/100 from an ssh failure which is completely transient (immediately running the test again manually clears the issue on the dashboard).
 \label{sec:conclusion}
 
 % use section* for acknowledgement
