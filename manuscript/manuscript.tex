@@ -83,8 +83,15 @@ In this paper we describe in detail our challenges and experiences in deploying 
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
-\section{Motivation}
-Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service.
+\section{Introduction}
+
+Monitoring large and complex high-performance computing systems has many challenges. Layers and multiple versions of software stack, system-level configurations, (parallel) file systems, diversity in users need and usage, and variable network traffics all interact to increase the system's complexity. Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. Therefore an application-level system monitoring is needed to give us a more complete picture of the system behavior.  
+
+Over time, either due to configuration changes or hardware aging, performance of such complex system may regress. To identify and correct such regression, one must have some method to do regression testing of the system performance. This requires systematic record of the the system performance over time.
+
+These two requirements can be concisely summarized as an ``application-level regression testing''. Our goal was then to come up with an automated solution for running these user-level regression tests to evaluate system usability and performance. For this purpose we have chosen to use Jenkins\footnote{http://jenkins.io}.
+
+%Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service.
 \section{Jenkins Configuration}
 \label{sec:JenkinsConfiguration}
 
@@ -215,12 +222,12 @@ When the state of a test changes, email notification is sent to the test owner. 
 \section{SWTools Integration}
 \label{sec:SWToolsIntegration}
 \subsection{SWTools with Jenkins}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{swtools-Jenkins}
-\caption{ Use SWTools with Jenkins }
-\label{fig:swtools-jenkins}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.5\textwidth]{swtools-Jenkins}
+%\caption{ Use SWTools with Jenkins }
+%\label{fig:swtools-jenkins}
+%\end{figure}
 
 \subsection{SWTools with Lammps}
 \begin{figure}[H]
