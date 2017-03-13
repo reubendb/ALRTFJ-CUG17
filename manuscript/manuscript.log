@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  7 MAR 2017 17:04
+=======
 This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  8 MAR 2017 08:33
+>>>>>>> reubendb/master
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -632,6 +636,28 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
+<<<<<<< HEAD
+[5 <./figures/mdtest-plot.png> <./figures/mdtest-config-email.png> <./figures/w
+iki-dashboard.png> <./figures/tabs-display.png>] (./manuscript.aux) ) 
+Here is how much of TeX's memory you used:
+ 5479 strings out of 493014
+ 87065 string characters out of 6133351
+ 192315 words of memory out of 5000000
+ 8946 multiletter control sequences out of 15000+600000
+ 34124 words of font info for 68 fonts, out of 8000000 for 9000
+ 1144 hyphenation exceptions out of 8191
+ 44i,8n,49p,1241b,1498s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/loca
+l/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2016/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/t
+exmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2016/texmf-dis
+t/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/
+type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/u
+rw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/u
+tmbi8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on manuscript.pdf (5 pages, 1277235 bytes).
+=======
 [6
 
  <./figures/tabs-display.png>] (./manuscript.aux)
@@ -657,6 +683,7 @@ onts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1
 s/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.
 pfb>
 Output written on manuscript.pdf (6 pages, 1255292 bytes).
+>>>>>>> reubendb/master
 PDF statistics:
  81 PDF objects out of 1000 (max. 8388607)
  40 compressed objects within 1 object stream
