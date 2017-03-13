@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  7 MAR 2017 17:04
-=======
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  8 MAR 2017 08:33
->>>>>>> reubendb/master
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  12 MAR 2017 15:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -350,64 +346,54 @@ Missing character: There is no € in font ptmb7t!
 Missing character: There is no ™ in font ptmb7t!
 Missing character: There is no â in font ptmb7t!
 Missing character: There is no € in font ptmb7t!
+Missing character: There is no ™ in font ptmb7t!
+Missing character: There is no â in font ptmb7t!
+Missing character: There is no € in font ptmb7t!
 Missing character: There is no ˜ in font ptmb7t!
 Missing character: There is no â in font ptmb7t!
 Missing character: There is no € in font ptmb7t!
 Missing character: There is no ™ in font ptmb7t!
 
-Underfull \vbox (badness 1354) has occurred while \output is active []
-
-
-Underfull \hbox (badness 1708) in paragraph at lines 88--93
-\OT1/ptm/m/n/10 Jenk-ins can be in-stalled through na-tive sys-tem pack-
- []
-
-
-Underfull \hbox (badness 8000) in paragraph at lines 88--93
-\OT1/ptm/m/n/10 http://pkg.jenkins-ci.org/redhat/jenkins.repo rpm --import
- []
-
-
-Underfull \hbox (badness 3138) in paragraph at lines 88--93
-\OT1/ptm/m/n/10 https://jenkins-ci.org/redhat/jenkins-ci.org.key yum in-stall
+Underfull \hbox (badness 8019) in paragraph at lines 92--97
+\OT1/ptm/m/n/10 http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo rpm --
  []
 
 [1{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 110.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 113.
 
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Overfull \hbox (3.94608pt too wide) in paragraph at lines 117--118
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 121--122
 [][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (8.53603pt too wide) in paragraph at lines 121--122
+Overfull \hbox (8.53603pt too wide) in paragraph at lines 125--126
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (3.94608pt too wide) in paragraph at lines 123--124
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 127--128
 [][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
+LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 131.
+LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <9> not available
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 139.
 
-Overfull \hbox (8.53603pt too wide) in paragraph at lines 129--130
-[][][][][][][][][][][][][][][] 
+Overfull \hbox (13.12598pt too wide) in paragraph at lines 141--142
+[][][][][][][][][][][][][][][][][][] 
  []
 
-LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 132.
-LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <9> not available
-(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 140.
 
-Overfull \hbox (13.12598pt too wide) in paragraph at lines 142--143
-[][][][][][][][][][][][][][][][][][] 
+Overfull \hbox (8.53603pt too wide) in paragraph at lines 145--146
+[][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
@@ -420,74 +406,90 @@ Overfull \hbox (3.94608pt too wide) in paragraph at lines 156--158
 [][][][][][][][][][][][][][][][][][] 
  []
 
+
+Overfull \hbox (31.48578pt too wide) in paragraph at lines 160--161
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (22.30588pt too wide) in paragraph at lines 161--162
+[][][][][][][][][][][][][][] 
+ []
+
 <figures/LDAP-Jenkins.png, id=11, 757.83125pt x 618.31pt>
 File: figures/LDAP-Jenkins.png Graphic file (type png)
 
 <use figures/LDAP-Jenkins.png>
-Package pdftex.def Info: figures/LDAP-Jenkins.png used on input line 164.
+Package pdftex.def Info: figures/LDAP-Jenkins.png used on input line 166.
 (pdftex.def)             Requested size: 252.94499pt x 206.37328pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 164--165
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 166--167
  [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--179
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 170--181
 
  []
 
 
-Underfull \hbox (badness 4531) in paragraph at lines 168--179
+Underfull \hbox (badness 4531) in paragraph at lines 170--181
 \OT1/ptm/m/n/10 to our LDAP be-cause we are us-ing a lo-cal CA.
  []
 
 
-Underfull \hbox (badness 6741) in paragraph at lines 168--179
+Underfull \hbox (badness 6741) in paragraph at lines 170--181
 \OT1/ptm/m/n/10 WARN-ING: Failed to search LDAP for user-name,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--179
+Underfull \hbox (badness 10000) in paragraph at lines 170--181
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--179
-\OT1/ptm/m/n/10 Had to add our cer-tifi-cate to the key-store:
+Underfull \hbox (badness 10000) in paragraph at lines 170--181
+\OT1/ptm/m/n/10 We had to add our cer-tifi-cate to the key-store:
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--179
+Underfull \hbox (badness 10000) in paragraph at lines 170--181
 \OT1/ptm/m/n/10 /us-r/-java/de-fault-/jre/bin/key-tool -list -keystore cac-erts
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 168--179
+Underfull \hbox (badness 10000) in paragraph at lines 170--181
 \OT1/ptm/m/n/10 -imle /etc/openl-dap/-cac-ert-s/-cac-ert.pem En-ter key-store
  []
 
-[2 <./figures/LDAP-Jenkins.png>]
-<figures/Configure-Global-Security.png, id=20, 1044.90375pt x 573.14125pt>
+<figures/Configure-Global-Security.png, id=19, 1044.90375pt x 573.14125pt>
 File: figures/Configure-Global-Security.png Graphic file (type png)
 
 <use figures/Configure-Global-Security.png>
 Package pdftex.def Info: figures/Configure-Global-Security.png used on input li
-ne 183.
+ne 185.
 (pdftex.def)             Requested size: 252.94499pt x 138.73734pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 183--184
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 185--186
  [][] 
  []
 
-<figures/swtools-Jenkins.png, id=21, 573.14125pt x 608.2725pt>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3 <./figures/LDAP-Jenkins.png> <./figures/Configure-Global-Security.png>]
+<figures/swtools-Jenkins.png, id=25, 573.14125pt x 608.2725pt>
 File: figures/swtools-Jenkins.png Graphic file (type png)
 
 <use figures/swtools-Jenkins.png>
-Package pdftex.def Info: figures/swtools-Jenkins.png used on input line 198.
+Package pdftex.def Info: figures/swtools-Jenkins.png used on input line 220.
 (pdftex.def)             Requested size: 252.94499pt x 268.44821pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 198--199
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 220--221
  [][] 
  []
 
@@ -495,40 +497,39 @@ Overfull \hbox (9.03374pt too wide) in paragraph at lines 198--199
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-<figures/swtools-lammps.png, id=22, 761.84625pt x 376.40625pt>
+<figures/swtools-lammps.png, id=26, 761.84625pt x 376.40625pt>
 File: figures/swtools-lammps.png Graphic file (type png)
 
 <use figures/swtools-lammps.png>
-Package pdftex.def Info: figures/swtools-lammps.png used on input line 206.
+Package pdftex.def Info: figures/swtools-lammps.png used on input line 228.
 (pdftex.def)             Requested size: 252.94499pt x 124.97258pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 206--207
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 228--229
  [][] 
  []
 
-<figures/IOR-bluewaters-descr.png, id=23, 1167.36125pt x 405.515pt>
+<figures/IOR-bluewaters-descr.png, id=27, 1167.36125pt x 405.515pt>
 File: figures/IOR-bluewaters-descr.png Graphic file (type png)
 
 <use figures/IOR-bluewaters-descr.png>
-Package pdftex.def Info: figures/IOR-bluewaters-descr.png used on input line 21
-7.
+Package pdftex.def Info: figures/IOR-bluewaters-descr.png used on input line 23
+9.
 (pdftex.def)             Requested size: 252.94499pt x 87.86465pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 217--218
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 239--240
  [][] 
  []
 
-[3 <./figures/Configure-Global-Security.png> <./figures/swtools-Jenkins.png> <.
-/figures/swtools-lammps.png>]
-<figures/IOR-configuration-sample.png, id=30, 729.72626pt x 827.09pt>
+[4 <./figures/swtools-Jenkins.png> <./figures/swtools-lammps.png>]
+<figures/IOR-configuration-sample.png, id=33, 729.72626pt x 827.09pt>
 File: figures/IOR-configuration-sample.png Graphic file (type png)
 
 <use figures/IOR-configuration-sample.png>
 Package pdftex.def Info: figures/IOR-configuration-sample.png used on input lin
-e 224.
+e 246.
 (pdftex.def)             Requested size: 252.94499pt x 286.68411pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 224--225
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 246--247
  [][] 
  []
 
@@ -538,90 +539,105 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 (/usr/local/texlive/2016/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-Overfull \hbox (3.94608pt too wide) in paragraph at lines 246--247
+Overfull \hbox (3.94608pt too wide) in paragraph at lines 268--269
 [][][][][][][][][][][][][][][][][][][] 
  []
 
-<figures/IOR-watchdog-out.png, id=31, 814.04124pt x 409.53pt>
+<figures/IOR-watchdog-out.png, id=34, 814.04124pt x 409.53pt>
 File: figures/IOR-watchdog-out.png Graphic file (type png)
 
 <use figures/IOR-watchdog-out.png>
-Package pdftex.def Info: figures/IOR-watchdog-out.png used on input line 254.
+Package pdftex.def Info: figures/IOR-watchdog-out.png used on input line 276.
 (pdftex.def)             Requested size: 252.94499pt x 127.25293pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 254--255
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 276--277
  [][] 
  []
 
-<figures/IOR-plot.png, id=32, 1008.76875pt x 705.63625pt>
+<figures/IOR-plot.png, id=35, 1008.76875pt x 705.63625pt>
 File: figures/IOR-plot.png Graphic file (type png)
 
 <use figures/IOR-plot.png>
-Package pdftex.def Info: figures/IOR-plot.png used on input line 265.
+Package pdftex.def Info: figures/IOR-plot.png used on input line 287.
 (pdftex.def)             Requested size: 252.94499pt x 176.92545pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 265--266
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 287--288
  [][] 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4 <./figures/IOR-bluewaters-descr.png> <./figures/IOR-configuration-sample.pn
+ [5 <./figures/IOR-bluewaters-descr.png> <./figures/IOR-configuration-sample.pn
 g> <./figures/IOR-watchdog-out.png>]
-<figures/mdtest-plot.png, id=39, 1008.76875pt x 709.65125pt>
+<figures/mdtest-plot.png, id=42, 1008.76875pt x 709.65125pt>
 File: figures/mdtest-plot.png Graphic file (type png)
 
 <use figures/mdtest-plot.png>
-Package pdftex.def Info: figures/mdtest-plot.png used on input line 275.
+Package pdftex.def Info: figures/mdtest-plot.png used on input line 297.
 (pdftex.def)             Requested size: 252.94499pt x 177.93213pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 275--276
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 297--298
  [][] 
  []
 
-<figures/mdtest-config-email.png, id=40, 1006.76125pt x 318.18875pt>
+<figures/mdtest-config-email.png, id=43, 1006.76125pt x 318.18875pt>
 File: figures/mdtest-config-email.png Graphic file (type png)
 
 <use figures/mdtest-config-email.png>
-Package pdftex.def Info: figures/mdtest-config-email.png used on input line 283
+Package pdftex.def Info: figures/mdtest-config-email.png used on input line 305
 .
 (pdftex.def)             Requested size: 252.94499pt x 79.94025pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 283--284
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 305--306
  [][] 
  []
 
-<figures/wiki-dashboard.png, id=41, 956.57375pt x 836.12375pt>
+<figures/wiki-dashboard.png, id=44, 956.57375pt x 836.12375pt>
 File: figures/wiki-dashboard.png Graphic file (type png)
 
 <use figures/wiki-dashboard.png>
-Package pdftex.def Info: figures/wiki-dashboard.png used on input line 292.
+Package pdftex.def Info: figures/wiki-dashboard.png used on input line 314.
 (pdftex.def)             Requested size: 252.94499pt x 221.08693pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 292--293
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 314--315
  [][] 
  []
 
-<figures/tabs-display.png, id=42, 979.66pt x 246.9225pt>
+<figures/tabs-display.png, id=45, 979.66pt x 246.9225pt>
 File: figures/tabs-display.png Graphic file (type png)
 
 <use figures/tabs-display.png>
-Package pdftex.def Info: figures/tabs-display.png used on input line 301.
+Package pdftex.def Info: figures/tabs-display.png used on input line 323.
 (pdftex.def)             Requested size: 252.94499pt x 63.75374pt.
 
-Overfull \hbox (9.03374pt too wide) in paragraph at lines 301--302
+Overfull \hbox (9.03374pt too wide) in paragraph at lines 323--324
  [][] 
  []
 
-[5 <./figures/IOR-plot.png> <./figures/mdtest-plot.png> <./figures/mdtest-confi
+[6 <./figures/IOR-plot.png> <./figures/mdtest-plot.png> <./figures/mdtest-confi
 g-email.png> <./figures/wiki-dashboard.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 323--325
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 330.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 330.
+
+Underfull \hbox (badness 10000) in paragraph at lines 341--343
+[]\OT1/ptm/m/n/10 Transient er-rors with Jenk-ins some-times occur--
+ []
+
+
+Underfull \hbox (badness 2521) in paragraph at lines 341--343
+\OT1/ptm/m/n/10 particularly with the Jenk-ins ssh sub-sys-tem. It's not
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 358--360
 []\OT1/ptm/m/n/10 [1] http://inca.sdsc.edu/ Inca Mon-i-tor-ing: pe-ri-odic,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 323--325
+Underfull \hbox (badness 10000) in paragraph at lines 358--360
 \OT1/ptm/m/n/10 au-to-mated, user-level cy-ber-in-fras-truc-ture test-ing [2]
  []
 
@@ -636,57 +652,31 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-<<<<<<< HEAD
-[5 <./figures/mdtest-plot.png> <./figures/mdtest-config-email.png> <./figures/w
-iki-dashboard.png> <./figures/tabs-display.png>] (./manuscript.aux) ) 
+[7
+
+ <./figures/tabs-display.png>] (./manuscript.aux) ) 
 Here is how much of TeX's memory you used:
- 5479 strings out of 493014
- 87065 string characters out of 6133351
- 192315 words of memory out of 5000000
- 8946 multiletter control sequences out of 15000+600000
+ 5485 strings out of 493014
+ 87075 string characters out of 6133351
+ 194397 words of memory out of 5000000
+ 8952 multiletter control sequences out of 15000+600000
  34124 words of font info for 68 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
- 44i,8n,49p,1241b,1498s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/loca
-l/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2016/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/t
-exmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2016/texmf-dis
-t/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/
-type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/u
-rw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/u
-tmbi8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
-></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on manuscript.pdf (5 pages, 1277235 bytes).
-=======
-[6
-
- <./figures/tabs-display.png>] (./manuscript.aux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
-Here is how much of TeX's memory you used:
- 5479 strings out of 493014
- 87065 string characters out of 6133351
- 192312 words of memory out of 5000000
- 8946 multiletter control sequences out of 15000+600000
- 34124 words of font info for 68 fonts, out of 8000000 for 9000
- 1144 hyphenation exceptions out of 8191
- 44i,8n,49p,1241b,1404s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
-xlive/2016/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/20
-16/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2016/texmf
--dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2016/texmf-dist/f
-onts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1
-/urw/times/utmbi8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/time
-s/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.
-pfb>
-Output written on manuscript.pdf (6 pages, 1255292 bytes).
->>>>>>> reubendb/master
+ 44i,8n,49p,1246b,1402s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2016/tex
+mf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2016/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016/texmf-dist/fonts/type
+1/urw/courier/ucrb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/co
+urier/ucrr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/courier/uc
+rro8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmb8a.pfb>
+</usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/loc
+al/texlive/2016/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive
+/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on manuscript.pdf (7 pages, 1269070 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
- 40 compressed objects within 1 object stream
+ 90 PDF objects out of 1000 (max. 8388607)
+ 47 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

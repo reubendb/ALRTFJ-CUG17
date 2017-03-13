@@ -57,16 +57,20 @@ The University of Tennessee, Knoxville, TN 37996\\
 \thispagestyle{plain}
 
 \begin{abstract}
-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. We evaluated test frameworks such as Inca [1] and Jenkins [2]. Jenkins was chosen for its versatility, large user base, and multitude of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
-
-Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. These are full end to end functionality tests of the programming environment, queueing system, license servers and they provide historical metrics to quickly detect regressions.
-
-In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. The deployment of Jenkins allows us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
+This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data, but it can also send email or text pages based on results of a test. Other requirements we had include two-factor authentication for accessing Jenkins GUI with administrator privileges and account management through LDAP. In this paper we describe our experience in deploying Jenkins as user-level system-wide regression testing and monitoring framework for Blue Waters.
 \end{abstract}
 
 \begin{IEEEkeywords}
 Performance; Benchmarking; Computer architecture
 \end{IEEEkeywords}
+
+\begin{abstract}
+LONG-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. We evaluated test frameworks such as Inca [1] and Jenkins [2]. Jenkins was chosen for its versatility, large user base, and multitude of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
+
+Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. These are full end to end functionality tests of the programming environment, queueing system, license servers and they provide historical metrics to quickly detect regressions.
+
+In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. The deployment of Jenkins allows us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
+\end{abstract}
 
 
 % For peer review papers, you can put extra information on the cover
@@ -86,9 +90,9 @@ Our goal was to come up with an automated solution for running user-level regres
 
 \subsection{Introduction to Jenkins}
 Jenkins [2] is a self-contained, open source automation server which can be used to automate all sorts of tasks such as building, testing, and deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with the Java Runtime Environment installed. 
-To install from rpm as root:
-wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
-rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+To install from rpm as root for centos:
+wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+rpm --import https://jenkins-ci.org/redhat-stable/jenkins-ci.org.key
 yum install jenkins
 \subsection{Master-Node Configuration}
 We added a standard user account to our cluster that will execute the Jenkins tests. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase was entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our TDS, production and development login nodes.   
@@ -104,10 +108,10 @@ The ssh public key generated on Jenkins Server was deployed in the login node us
 Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. Jenkins has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once you complete the sign up form, you have full admin access to the system.  This required us initially to test the deployment with our test and development (TDS) CRAY. This resulted in the following requirements. Restricted OTP access to the physical system that will host Jenkins. In addition, OTP only access to the Jenkins GUI command console that must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
 
 \subsection{Configuration Choices}
-Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with pass-wordless access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restricting access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  A reverse proxy was used to run Jenkins behind apache/http with SSL for access to the administrative console. All the configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. \\
-(config file snippets below)
+Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with pass-wordless access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restricting access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  A reverse proxy was used to run Jenkins behind apache/http with SSL for access to the administrative console. All the configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
 
 \begin{lstlisting}
+(Jenkins sever configuration file snippets below)
 /etc/ssh/sshd_config:
 Match Host bwbh1.ncsa.illinois.edu,
 bwbh2.ncsa.illinois.edu
@@ -124,11 +128,6 @@ HostbasedAuthentication yes
 -p tcp --dport 443 -j ACCEPT
 
 /etc/httpd/conf.d/ssl.conf:
-Listen 443
-<VirtualHost _default_:443>
-SSLSessionCache         shmcb:/var/cache/mod_ssl/scache
-SSLSessionCacheTimeout  300
-ServerName bwjenkins.ncsa.illinois.edu:443
  # -- The following sets ReverseProxy for Jenkins
   ProxyRequests       Off
   ProxyPreserveHost   On
@@ -143,6 +142,7 @@ ServerName bwjenkins.ncsa.illinois.edu:443
   RequestHeader set X-Forwarded-Proto "https"
   RequestHeader set X-Forwarded-Port "443"
 
+ # -- The following sets OTP for Jenkins SSL connection
   DefineExternalAuth pwauth+session pipe /usr/local/bin/
   pwauth+session
   <LocationMatch / > 
@@ -156,8 +156,10 @@ ServerName bwjenkins.ncsa.illinois.edu:443
     RequestHeader set "X-Forwarded-User" (REMOTE_USER)
 
   </LocationMatch>
+  
+ /usr/local/bin/pwauth+session: https://github.com/reubendb/
+ BasicAuthOTPSession/blob/master/BasicAuthOTPSession.py#L1
 \end{lstlisting}
-
 \subsection{LDAP with Jenkins}
 \begin{figure}[H]
 \centering
@@ -341,7 +343,7 @@ Transient errors with Jenkins sometimes occur--particularly with the Jenkins ssh
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
-This research used resources at the National Institute for Computational Sciences, funded by the National Science Foundation (NSF).
+This research used resources at the National Institute for Computational Sciences and the National Center for Supercomputing Applications, funded by the National Science Foundation (NSF).
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
