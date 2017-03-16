@@ -83,21 +83,36 @@ In this paper we describe in detail our challenges and experiences in deploying 
 % creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
-\section{Motivation}
-Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service.
+\section{Introduction}
+\label{sec:introduction}
+
+Monitoring large and complex high-performance computing systems has many challenges. Layers and multiple versions of software stack, system-level configurations, (parallel) file systems, diversity in users need and usage, and variable network traffics all interact to increase the system's complexity. Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. Therefore an application-level system monitoring is needed to give us a more complete picture of the system behavior.  
+
+Over time, either due to configuration changes or hardware aging, performance of such complex system may regress. To identify and correct such regression, one must have some method to do regression testing of the system performance. This requires systematic record of the the system performance over time.
+
+These two requirements can be concisely summarized as an ``application-level regression testing''. Our goal was then to come up with an automated solution for running these user-level regression tests to evaluate system usability and performance. For this purpose we have chosen to use Jenkins\footnote{http://jenkins.io}.
+
+Jenkins is an open source automation server. Although it is typically used as continuous integration tool in software development process, its wide-ranging features makes it suitable for any task that can be automated. These tasks may include building applications, executing them, deploying software, and running various custom-written tests and scripts. We chose Jenkins as the tool for our regression testing framework because its active development, wide community support, and the readily available ``plugins'' to perform various specific tasks.
+
+In this paper we describe in details our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Water supercomputer at the National Center for Supercomputing Application, Darter and Beacon at the National Institute for Computational Sciences (NICS). These systems are Cray XK, XC, and CS series. The outline of this paper is as follows. [NEED TO WRITE THIS]
+
+%Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service.
+
 \section{Jenkins Configuration}
 \label{sec:JenkinsConfiguration}
 
-\subsection{Introduction to Jenkins}
-Jenkins [2] is a self-contained, open source automation server which can be used to automate all sorts of tasks such as building, testing, and deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with the Java Runtime Environment installed. 
-To install from rpm as root for centos:
-\begin{lstlisting}
-wget -O /etc/yum.repos.d/jenkins.repo \
-  http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
-rpm --import \
-  https://jenkins-ci.org/redhat-stable/jenkins-ci.org.key
-yum install jenkins
-\end{lstlisting}
+% \subsection{Introduction to Jenkins}
+% Jenkins [2] is a self-contained, open source automation server which can be used to automate all sorts of tasks such as building, testing, and deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with the Java Runtime Environment installed. 
+% To install from rpm as root for centos:
+% \begin{lstlisting}
+% wget -O /etc/yum.repos.d/jenkins.repo \
+%   http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+% rpm --import \
+%   https://jenkins-ci.org/redhat-stable/jenkins-ci.org.key
+% yum install jenkins
+% \end{lstlisting}
+
+
 \subsection{Master-Node Configuration}
 We added a standard user account to our cluster that will execute the Jenkins tests. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase was entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our TDS, production and development login nodes.   
 
@@ -219,12 +234,12 @@ When the state of a test changes, email notification is sent to the test owner. 
 \section{SWTools Integration}
 \label{sec:SWToolsIntegration}
 \subsection{SWTools with Jenkins}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{swtools-Jenkins}
-\caption{ Use SWTools with Jenkins }
-\label{fig:swtools-jenkins}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.5\textwidth]{swtools-Jenkins}
+%\caption{ Use SWTools with Jenkins }
+%\label{fig:swtools-jenkins}
+%\end{figure}
 
 \subsection{SWTools with Lammps}
 \begin{figure}[H]
