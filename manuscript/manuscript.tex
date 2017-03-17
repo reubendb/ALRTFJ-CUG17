@@ -112,6 +112,17 @@ In this paper we describe in details our experience in using Jenkins to perform 
 % yum install jenkins
 % \end{lstlisting}
 
+Jenkins is typically available from the package repository of most major linux distribution of choice. One can also download and install Jenkins directly from its website. We used the RPM package to install Jenkins on a CentOS virtual machine (VM). Jenkins comes with its own web server so that managing and accessing Jenkins can be done via any web browser (in the next section we discuss using Apache HTTP Server in front of Jenkin's for better security). Typically Jenkins's web server listen to port 8080, but this is configurable. 
+
+Jenkins has an implicit assumption that the machine on which it is installed is also the primary machine being used to build and test the software. In our case, this is not what we would want. In fact, our applications will be built on the HPC system on which we intent to run the tests (typically on the login nodes), and will be run on the compute nodes of the HPC system (i.e. via batch job submission to the job queueing system). This is because not only we want to test the runtime performance of the applications, but also we want to ensure that the software and programming environment of the system can still build the applications correctly. Incidentally, the latter also informs us any user-level problem such as slow or overloaded login nodes, slow file system access, erroneous or incompatible default software (library, compilers, etc) versions. In short, we want our tests to simulate typical workflow of a user on the system being testing.
+
+Therefore what we need is a mechanism to execute a ``project'' --- a user-configured description of work which Jenkins should perform such as building a piece of software, in Jenkins jargon --- on remote machines (``remote'' from the perspective of Jenkins). In this case, the Jenkins machine simply manages the automation scheduling, shows status of projects in execution (``builds'' in Jenkins jargon) , and archives results of the tests (i.e. ``artifact''). It also provides the user interface (via its own web server) to create and configure projects. These tasks are sufficiently light weight such that Jenkins can be installed on a VM with sufficient disk space for the artifacts, since the trully heavy lifting on building and executing the application tests are done on the remote machine.
+
+There are two ways to achieve executing builds on remote machine. Each has their own benefits, and whichever way to use is a matter of choice. One may use Jenkin's core feature of adding ``Nodes`` to its environment. One may also use a Jenkins plugin called ''SSH Plugin`` to allow execution on remote machine via SSH protocol. At NICS our setup uses the former, while at NCSA our setup uses the latter. In the following we briefly discuss the setup of these two mechanisms.
+
+
+
+
 
 \subsection{Master-Node Configuration}
 We added a standard user account to our cluster that will execute the Jenkins tests. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase was entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our TDS, production and development login nodes.   
