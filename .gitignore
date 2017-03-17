@@ -7,8 +7,6 @@
 
 *.gz
 
-*.pdf
-
 *.log
 
 *.aux
