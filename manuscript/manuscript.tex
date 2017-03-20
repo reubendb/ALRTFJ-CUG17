@@ -172,9 +172,9 @@ HostbasedAuthentication yes
   RequestHeader set X-Forwarded-Proto "https"
   RequestHeader set X-Forwarded-Port "443"
 
- # -- The following sets OTP for Jenkins SSL connection
-  DefineExternalAuth pwauth+session pipe /usr/local/bin/
-  pwauth+session
+ # -- OTP for Jenkins SSL connection
+   DefineExternalAuth pwauth+session pipe 
+   /usr/local/bin/pwauth+session
   <LocationMatch / > 
     AuthType Basic
     AuthBasicProvider external
@@ -187,8 +187,9 @@ HostbasedAuthentication yes
 
   </LocationMatch>
   
- /usr/local/bin/pwauth+session: https://github.com/reubendb/
- BasicAuthOTPSession/blob/master/BasicAuthOTPSession.py#L1
+ /usr/local/bin/pwauth+session: 
+ https://github.com/reubendb/BasicAuthOTPSession
+ /blob/master/BasicAuthOTPSession.py#L1
 \end{lstlisting}
 \subsection{LDAP with Jenkins}
 \begin{figure}[H]
