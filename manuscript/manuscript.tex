@@ -151,7 +151,7 @@ HostbasedAuthentication yes
 -A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 -p tcp --dport 22 -j ACCEPT
 -A INPUT -s 172.16.0.0/15 -m state --state NEW -m tcp 
--p tcp --dport 22 -j ACCEPT *delete maybe*
+-p tcp --dport 22 -j ACCEPT 
 -A INPUT  -m state --state NEW -m tcp -p tcp --dport 80 
 -j ACCEPT
 -A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
@@ -186,10 +186,18 @@ HostbasedAuthentication yes
     RequestHeader set "X-Forwarded-User" (REMOTE_USER)
 
   </LocationMatch>
+ 
+ NOTE: Install  mod_authnz_external native package
   
+  /etc/pam.d/pwauth:
+ #%PAM-1.0
+ auth	   required	/lib64/security/pam_securid.so
+ account    include      password-auth
+
  /usr/local/bin/pwauth+session: 
  https://github.com/reubendb/BasicAuthOTPSession
  /blob/master/BasicAuthOTPSession.py#L1
+  
 \end{lstlisting}
 \subsection{LDAP with Jenkins}
 \begin{figure}[H]
