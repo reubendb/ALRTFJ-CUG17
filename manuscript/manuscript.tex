@@ -112,15 +112,17 @@ In this paper we describe in details our experience in using Jenkins to perform 
 % yum install jenkins
 % \end{lstlisting}
 
+\subsection{Installation}
 Jenkins is typically available from the package repository of most major linux distribution of choice. One can also download and install Jenkins directly from its website. We used the RPM package to install Jenkins on a CentOS virtual machine (VM). Jenkins comes with its own web server so that managing and accessing Jenkins can be done via any web browser (in the next section we discuss using Apache HTTP Server in front of Jenkin's for better security). Typically Jenkins's web server listen to port 8080, but this is configurable. 
 
+\subsection{Accessing HPC Test Systems}
 Jenkins has an implicit assumption that the machine on which it is installed is also the primary machine being used to build and test the software. In our case, this is not what we would want. In fact, our applications will be built on the HPC system on which we intent to run the tests (typically on the login nodes), and will be run on the compute nodes of the HPC system (i.e. via batch job submission to the job queueing system). This is because not only we want to test the runtime performance of the applications, but also we want to ensure that the software and programming environment of the system can still build the applications correctly. Incidentally, the latter also informs us any user-level problem such as slow or overloaded login nodes, slow file system access, erroneous or incompatible default software (library, compilers, etc) versions. In short, we want our tests to simulate typical workflow of a user on the system being testing.
 
 Therefore what we need is a mechanism to execute a ``project'' --- a user-configured description of work which Jenkins should perform such as building a piece of software, in Jenkins parlance --- on remote machines (``remote'' from the perspective of Jenkins). In this case, the Jenkins machine simply manages the automation scheduling, shows status of projects in execution (``builds'' in Jenkins parlance) , and archives results of the tests (i.e. ``artifact''). It also provides the user interface (via its own web server) to create and configure projects. These tasks are sufficiently light weight such that Jenkins can be installed on a VM with sufficient disk space for the artifacts, since the trully heavy lifting on building and executing the application tests are done on the remote machine.
 
 There are two ways to achieve executing builds on remote machine. Each has their own benefits, and whichever way to use is a matter of choice. One may use Jenkin's core feature of adding ``Nodes`` to its environment. One may also use a Jenkins plugin called ''SSH Plugin`` to allow execution on remote machine via SSH protocol. At NICS our setup uses the former, while at NCSA our setup uses the latter. In the following we briefly discuss the setup of these two mechanisms.
 
-\subsection{Using Nodes for Test Systems}
+\subsubsection{Using Nodes for Test Systems}
 The original idea behind adding nodes is to allow Jenkins to scale with the workload it has to do. As projects are added, one can add nodes (i.e. more build machines) allowing Jenkins to build more projects concurrently. Jenkin's project can also be explicitly 'labeled' to only be executed on a certain node. We capitalized both of these features to enable the aforementioned remote execution.
 
 For each HPC system login node, we created a Jenkins node\footnote{Do not be confused with multiple usage of the word ''node`` here. The former refers to the typical usage of login node in HPC. The latter refers to Jenkins' vernacular of ''node`` as previously defined}. We then labeled the (Jenkins) node with the name of the HPC system. For example, at NICS we have the labels 'beacon' and 'darter' to refer to the Cray CS-300 (Beacon) and XC-30 (Darter) login nodes, respectively. Each test application (i.e. ''project``) is then labeled to ensure that they only run on the appropriate node. For example, we have used NAMD (FIXME: Need reference for NAMD) as an applicaton test. We would create a Jenkin project called ''NAMD-Beacon`` and label it to only run on ''beacon`` node. We would also create another project called ''NAMD-Darter`` and label it appropriately. The two projects have slighly different build scripts (and possibly different test cases) so that they build correctly on the systems they were meant to run on.
@@ -129,7 +131,7 @@ Jenkins nodes need to have a Java-based daemon (Jenkins' ''slave.jar``) to run w
 
 The benefit of this method is that one can basically treat the nodes as local environment in Jenkins, while having access to the HPC environment. For example, each node would have access to the parallel lustre filesystem mounted by the HPC system (even if Jenkins master itself does not, being only a small separate VM). Each node can define its lustre filesystem as its build and test workspace. Yet Jenkins automatically manages all communication with the nodes such that files (e.g. plot data, test output) generated on the lustre filesystem is readable from Jenkins without the explicit remote copy (i.e. via SCP). Another example is that one can have Jenkins checkout or clone code from remote repository (e.g. using Subversion or Git) and the copy will be automatically available on the lustre filesystem defined as the workspace of that node. These benefits integration makes building Jenkins project more seamless.
 
-\subsection{Using SSH Plugins for Test Systems}
+\subsubsection{Using SSH Plugins for Test Systems}
 The SSH plugin (FIXME: Need references) is another method for which one can access the HPC systems from Jenkins. As the name implies, Jenkins project with this type of build scripts simply SSH to the desired machine then execute the scripts there. 
 
 The benefit of this method is that it more closely mimmicks (FIXME; spelling) how real users access the HPC system. There is no need for additional daemon to run on the HPC login nodes and there is no need for the corresponding opening of port on Jenkins VM. Because NCSA and NICS systems utilize two-factor RSA one-time password for users login, we needed to make slight modification so that Jenkins can have automated login. The login nodes \textttt{/etc/ssh/sshd_config} was modified to allow ''Public Key Authentication`` from the Jenkins VM unique IP address. Pairs of SSH keys with passphrase were generated on Jenkins VM with their public keys deployed on the appropriate login nodes to allow for passwordless login. The SSH plugins allow one to manage which key (and passphrase) to use with which system. The keys on Jenkins VM are located under Jenkins home directory (by default \texttt{/var/lib/jenkins/.ssh}. Although configuring all of these could be somewhat tedious, once everything is set Jenkins should be able to run scripts on the intended HPC systems via SSH. For testing our setup, we created simple Jenkins projects whose task is to print out the \texttt{\$HOSTNAME} of the system.
@@ -141,7 +143,18 @@ The drawback of this method is that one has to manage almost all data management
 %We added a standard user account to our cluster that will execute the Jenkins tests. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase was entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our TDS, production and development login nodes.   
 
 %\subsection{Accessing Login Nodes}
-%The ssh public key generated on Jenkins Server was deployed in the login node user account. The login node sshd_config was modified to allow Public Key Authentication from the Jenkins Server IP.     
+%The ssh public key generated on Jenkins Server was deployed in the login node user account. The login node sshd_config was modified to allow Public Key Authentication from the Jenkins Server IP.
+
+\subsection{Securing Jenkins Web Front-end}
+
+Jenkins comes with its own web server. Although Jenkins also has a command-line interface, the primary way to interact with Jenkins (configuring, setting up projects, running builds) is via a web browser. Although Jenkins web server may be sufficient for a setup in which Jenkins is only accessible in a secure, walled of, intranet environment, we feel that using a more secure, well-tested, production quality web server as its front end is warranted.
+
+We decided to use Apache HTTPD Server as the front-end web server facing the world. To achieve that, first we set Jenkins web server to only listen to \texttt{localhost} interface on port 8080, by setting the following variable in Jenkins configuration file \texttt{/etc/sysconfig/jenkins}:
+FIXME: COPY RELEvANT JENKINS CONFIG HERE
+
+Second, we need to forward all HTTP requests to Jenkins, and also forward Jenkins responses back to the client. This is a feature called ''ReverseProxy`` in Apache HTTPD. Th
+
+
 
 
 \section{Authentication and Authorization}
