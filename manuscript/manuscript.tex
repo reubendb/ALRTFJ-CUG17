@@ -57,7 +57,7 @@ The University of Tennessee, Knoxville, TN 37996\\
 \thispagestyle{plain}
 
 \begin{abstract}
-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSAâ€™s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data, but it can also send email or text pages based on results of a test. Other requirements we had include two-factor authentication for accessing the Jenkins GUI with administrator privileges and account management through LDAP. In this paper we describe our experience in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
+This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA'€™s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data, but it can also send email or text messages based on results of a test. Other requirements we had include two-factor authentication for accessing the Jenkins GUI with administrator privileges and account management through LDAP. In this paper we describe our experience in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -86,7 +86,7 @@ Performance; Benchmarking; Computer architecture
 \section{Introduction}
 \label{sec:introduction}
 
-Monitoring large and complex high-performance computing systems have many challenges. Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in users need and usage, and variable network traffics all interact to increase the system's complexity. Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. Therefore an application-level system monitoring framework is needed to give us a more complete picture of the system behavior.  
+Monitoring large and complex high-performance computing systems have many challenges. Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in user need and usage, and variable network traffics all interact to increase the system's complexity. Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. Therefore an application-level system monitoring framework is needed to give us a more complete picture of the system behavior.  
 
 Over time, either due to configuration and software changes or hardware aging, performance of such complex system may regress. To identify and correct such regression, one must have some method to do regression testing of the system performance. This requires a systematic record of the system performance over time.
 
@@ -124,82 +124,99 @@ There are two ways to achieve an executing build on a remote machine. Each have 
 
 
 
-\subsection{Master-Node Configuration}
-We added a standard user account to our cluster that will execute the Jenkins tests. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase was entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our TDS, production and development login nodes.   
+\subsection{Master-Node Configuration NCSA}
+We added a standard user account to our Blue Waters environment that will execute the Jenkins projects. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase were entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our test and development (TDS) CRAY, production and development login nodes. 
 
-\subsection{Accessing Login Nodes}
-The ssh public key generated on Jenkins Server was deployed in the login node user account. The login node sshd_config was modified to allow Public Key Authentication from the Jenkins Server IP.     
+\subsection{Accessing Login Nodes NCSA}
+The ssh public key generated on Jenkins Server was deployed in the login node user account. The login nodes sshd_config was modified to allow Public Key Authentication from the Jenkins Server IP. We typically run the latest Programming Environment (PE) on our TDS. Our production login nodes and the supercomputer have the latest PE installed as non default during initial testing and it can be loaded by modulefile selection. Our test login node (Bright Cluster Provisioned EsLogin) is utilized for testing new software stacks and changes to the login environment that are independent of our production resources. Therefore Jenkins Projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments.   
+    
 
+\subsection{Master-Node Configuration NICS}
+\subsection{Accessing Login Nodes NICS}
 
 \section{Authentication and Authorization}
 \label{sec:AuthenticationAuthorization}
 
 \subsection{Security Considerations}
-Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. Jenkins has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once signed in, you have full admin access to the Jenkins system instance.  This required us initially to test the deployment with our test and development (TDS) CRAY. This resulted in the following requirement: restricted OTP access to the physical system hosting Jenkins. In addition, OTP only access to the Jenkins GUI command console must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
+Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. It also has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once signed in, you have full admin access to the Jenkins system instance.  This required us initially to test the deployment with our TDS. This resulted in the following requirement: restricted OTP access to the physical system hosting Jenkins. In addition, OTP only access to the Jenkins GUI command console must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
 
 \subsection{Configuration Choices}
-The Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restrict access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  A reverse proxy was used to run Jenkins behind Apache HTTP Server with SSL for access to the administrative console. All the configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
-
+The Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restrict access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  Jenkins is configured to listen on port 8080 by default and we restricted it to localhost only. A reverse proxy was configured to run Jenkins behind Apache HTTP Server and SSL for access to the administrative console. With this reverse proxy, apache accepts requests on port 80 and 443 of bwjenkins.ncsa.illinois.edu and forwards them to the jenkins web server at localhost which is now firewall protected. Most of this configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
 \begin{lstlisting}
+
+
+
+
+
+
+
+NOTE: Install mod_authnz_external Apache package
+
 (Jenkins sever configuration file snippets below)
+
 /etc/ssh/sshd_config:
 Match Host bwbh1.ncsa.illinois.edu,
 bwbh2.ncsa.illinois.edu
 HostbasedAuthentication yes
+
 
 /etc/sysconfig/iptables:
 -A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 -p tcp --dport 22 -j ACCEPT
 -A INPUT -s 172.16.0.0/15 -m state --state NEW -m tcp 
 -p tcp --dport 22 -j ACCEPT 
--A INPUT  -m state --state NEW -m tcp -p tcp --dport 80 
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 
 -j ACCEPT
 -A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 -p tcp --dport 443 -j ACCEPT
 
+
 /etc/httpd/conf.d/ssl.conf:
  # -- The following sets ReverseProxy for Jenkins
-  ProxyRequests       Off
-  ProxyPreserveHost   On
-  AllowEncodedSlashes On
-  <Proxy *>
-    Order deny,allow
-    Allow from all
-  </Proxy>
-  ProxyPass       / http://localhost:8080/ nocanon
-  ProxyPassReverse / http://localhost:8080/
-  ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
-  RequestHeader set X-Forwarded-Proto "https"
-  RequestHeader set X-Forwarded-Port "443"
+ProxyRequests       Off
+ProxyPreserveHost   On
+AllowEncodedSlashes On
+<Proxy *>
+Order deny,allow
+Allow from all
+</Proxy>
+ProxyPass       / http://localhost:8080/ nocanon
+ProxyPassReverse / http://localhost:8080/
+ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
+RequestHeader set X-Forwarded-Proto "https"
+RequestHeader set X-Forwarded-Port "443"
 
  # -- OTP for Jenkins SSL connection
-   DefineExternalAuth pwauth+session pipe 
-   /usr/local/bin/pwauth+session
-  <LocationMatch / > 
-    AuthType Basic
-    AuthBasicProvider external
-    AuthName "NCSA RSA OTP login" 
-    AuthExternal pwauth+session
-    require valid-user
-    
-    RequestHeader unset "X-Forwarded-User"
-    RequestHeader set "X-Forwarded-User" (REMOTE_USER)
-
-  </LocationMatch>
+DefineExternalAuth pwauth+session pipe 
+/usr/local/bin/pwauth+session
+<LocationMatch / > 
+AuthType Basic
+AuthBasicProvider external
+AuthName "NCSA RSA OTP login" 
+AuthExternal pwauth+session
+require valid-user  
+RequestHeader unset "X-Forwarded-User"
+RequestHeader set "X-Forwarded-User" (REMOTE_USER)
+</LocationMatch>
  
- NOTE: Install  mod_authnz_external native package
-  
-  /etc/pam.d/pwauth:
- #%PAM-1.0
- auth	   required	/lib64/security/pam_securid.so
- account    include      password-auth
 
- /usr/local/bin/pwauth+session: 
- https://github.com/reubendb/BasicAuthOTPSession
- /blob/master/BasicAuthOTPSession.py#L1
+/usr/local/bin/pwauth+session(OTP caching): 
+https://github.com/reubendb/BasicAuthOTPSession
+/blob/master/BasicAuthOTPSession.py#L1
+
   
+/etc/pam.d/pwauth (for OTP):
+ #%PAM-1.0
+auth  required  /lib64/security/pam_securid.so
+account  include  password-auth
+
+
+/etc/sysconfig/jenkins (restrict to localhost):
+JENKINS_PORT="8080"
+JENKINS_LISTEN_ADDRESS=127.0.0.1
 \end{lstlisting}
-\subsection{LDAP with Jenkins}
+\subsection{LDAP with Jenkins} 
+%To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, then select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{LDAP-Jenkins}
@@ -207,8 +224,7 @@ HostbasedAuthentication yes
 \label{fig:LDAP-Jenkins}
 \end{figure}
 To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, then select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.\\
-\\
-My first stab at this failed as an anonymous connection to our LDAP because we are using a local CA.
+At first this failed because our LDAP is using a local CA.
 WARNING: Failed to search LDAP for username, 
 sun.security.provider.certpath.SunCertPathBuilderException:
 unable to find valid certification path to requested target\\
