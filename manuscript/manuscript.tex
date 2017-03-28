@@ -57,20 +57,20 @@ The University of Tennessee, Knoxville, TN 37996\\
 \thispagestyle{plain}
 
 \begin{abstract}
-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data, but it can also send email or text pages based on results of a test. Other requirements we had include two-factor authentication for accessing the Jenkins GUI with administrator privileges and account management through LDAP. In this paper we describe our experience in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
+This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA'��s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data, but it can also send email or text messages based on results of a test. Other requirements we had include two-factor authentication for accessing the Jenkins GUI with administrator privileges and account management through LDAP. In this paper we describe our experience in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
 \end{abstract}
 
 \begin{IEEEkeywords}
 Performance; Benchmarking; Computer architecture
 \end{IEEEkeywords}
 
-\begin{abstract}
-LONG-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. We evaluated test frameworks such as Inca [1] and Jenkins [2]. Jenkins was chosen for its versatility, large user base, and multitude of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
+%\begin{abstract}
+%LONG-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. We evaluated test frameworks such as Inca [1] and Jenkins [2]. Jenkins was chosen for its versatility, large user base, and multitude of plugins including plotting test results over time. We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
 
-Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. These are full end to end functionality tests of the programming environment, queueing system, license servers and they provide historical metrics to quickly detect regressions.
+%Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. Jenkins is set to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. These are full end to end functionality tests of the programming environment, queueing system, license servers and they provide historical metrics to quickly detect regressions.
 
-In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. The deployment of Jenkins allows us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
-\end{abstract}
+%In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. The deployment of Jenkins allows us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
+%\end{abstract}
 
 
 % For peer review papers, you can put extra information on the cover
@@ -86,111 +86,198 @@ In this paper we describe in detail our challenges and experiences in deploying 
 \section{Introduction}
 \label{sec:introduction}
 
-Monitoring large and complex high-performance computing systems has many challenges. Layers and multiple versions of software stack, system-level configurations, (parallel) file systems, diversity in users need and usage, and variable network traffics all interact to increase the system's complexity. Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. Therefore an application-level system monitoring is needed to give us a more complete picture of the system behavior.  
+Monitoring large and complex high-performance computing systems have many challenges. Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in user need and usage, and variable network traffics all interact to increase the system's complexity. Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. Therefore an application-level system monitoring framework is needed to give us a more complete picture of the system behavior.  
 
-Over time, either due to configuration changes or hardware aging, performance of such complex system may regress. To identify and correct such regression, one must have some method to do regression testing of the system performance. This requires systematic record of the the system performance over time.
+Over time, either due to configuration and software changes or hardware aging, performance of such complex system may regress. To identify and correct such regression, one must have some method to do regression testing of the system performance. This requires a systematic record of the system performance over time.
 
 These two requirements can be concisely summarized as an ``application-level regression testing''. Our goal was then to come up with an automated solution for running these user-level regression tests to evaluate system usability and performance. For this purpose we have chosen to use Jenkins\footnote{http://jenkins.io}.
 
-Jenkins is an open source automation server. Although it is typically used as continuous integration tool in software development process, its wide-ranging features makes it suitable for any task that can be automated. These tasks may include building applications, executing them, deploying software, and running various custom-written tests and scripts. We chose Jenkins as the tool for our regression testing framework because its active development, wide community support, and the readily available ``plugins'' to perform various specific tasks.
+Jenkins is an open source automation server. Although it is typically used as a continuous integration tool in the software development process, its wide-ranging features makes it suitable for any task that can be automated. These tasks may include building applications, executing them, deploying software, and running various custom-written tests and scripts. We chose Jenkins as the tool for our regression testing framework because of its active development, wide community support, and the readily available ``plugins'' to perform various specific tasks.
 
-In this paper we describe in details our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Water supercomputer at the National Center for Supercomputing Application, Darter and Beacon at the National Institute for Computational Sciences (NICS). These systems are Cray XK, XC, and CS series. The outline of this paper is as follows. [NEED TO WRITE THIS]
-
-%Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service.
+In this paper we describe in details our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Water supercomputer at the National Center for Supercomputing Applications (NCSA), Darter and Beacon at the National Institute for Computational Sciences (NICS). These systems are Cray XE, XK, XC, and CS series. The outline of this paper is as follows. [FIXME: WRITE PAPER OUTLINE AFTER COMPLETE DRAFT].
 
 \section{Jenkins Configuration}
 \label{sec:JenkinsConfiguration}
 
-% \subsection{Introduction to Jenkins}
-% Jenkins [2] is a self-contained, open source automation server which can be used to automate all sorts of tasks such as building, testing, and deploying software. Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with the Java Runtime Environment installed. 
-% To install from rpm as root for centos:
-% \begin{lstlisting}
-% wget -O /etc/yum.repos.d/jenkins.repo \
-%   http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
-% rpm --import \
-%   https://jenkins-ci.org/redhat-stable/jenkins-ci.org.key
-% yum install jenkins
-% \end{lstlisting}
-
+\subsection{Installation}
 Jenkins is typically available from the package repository of most major linux distribution of choice. One can also download and install Jenkins directly from its website. We used the RPM package to install Jenkins on a CentOS virtual machine (VM). Jenkins comes with its own web server so that managing and accessing Jenkins can be done via any web browser (in the next section we discuss using Apache HTTP Server in front of Jenkin's for better security). Typically Jenkins's web server listen to port 8080, but this is configurable. 
 
+\subsection{Accessing HPC Test Systems}
 Jenkins has an implicit assumption that the machine on which it is installed is also the primary machine being used to build and test the software. In our case, this is not what we would want. In fact, our applications will be built on the HPC system on which we intent to run the tests (typically on the login nodes), and will be run on the compute nodes of the HPC system (i.e. via batch job submission to the job queueing system). This is because not only we want to test the runtime performance of the applications, but also we want to ensure that the software and programming environment of the system can still build the applications correctly. Incidentally, the latter also informs us any user-level problem such as slow or overloaded login nodes, slow file system access, erroneous or incompatible default software (library, compilers, etc) versions. In short, we want our tests to simulate typical workflow of a user on the system being testing.
 
-Therefore what we need is a mechanism to execute a ``project'' --- a user-configured description of work which Jenkins should perform such as building a piece of software, in Jenkins jargon --- on remote machines (``remote'' from the perspective of Jenkins). In this case, the Jenkins machine simply manages the automation scheduling, shows status of projects in execution (``builds'' in Jenkins jargon) , and archives results of the tests (i.e. ``artifact''). It also provides the user interface (via its own web server) to create and configure projects. These tasks are sufficiently light weight such that Jenkins can be installed on a VM with sufficient disk space for the artifacts, since the trully heavy lifting on building and executing the application tests are done on the remote machine.
+Therefore what we need is a mechanism to execute a ``project'' --- a user-configured description of work which Jenkins should perform such as building a piece of software, in Jenkins parlance --- on remote machines (``remote'' from the perspective of Jenkins). In this case, the Jenkins machine simply manages the automation scheduling, shows status of projects in execution (``builds'' in Jenkins parlance) , and archives results of the tests (i.e. ``artifact''). It also provides the user interface (via its own web server) to create and configure projects. These tasks are sufficiently light weight such that Jenkins can be installed on a VM with sufficient disk space for the artifacts, since the trully heavy lifting on building and executing the application tests are done on the remote machine.
 
-There are two ways to achieve executing builds on remote machine. Each has their own benefits, and whichever way to use is a matter of choice. One may use Jenkin's core feature of adding ``Nodes`` to its environment. One may also use a Jenkins plugin called ''SSH Plugin`` to allow execution on remote machine via SSH protocol. At NICS our setup uses the former, while at NCSA our setup uses the latter. In the following we briefly discuss the setup of these two mechanisms.
+There are two ways to achieve an executing build on a remote machine. Each have their own benefits, and your selection is a matter of choice. One may use Jenkin's core feature of adding ``Nodes`` to its environment. One may also use a Jenkins plugin called ''SSH Plugin`` to allow execution on a remote machine via SSH protocol. At NICS our setup uses the former, while at NCSA our setup uses the latter. In the following we briefly discuss the setup of these two mechanisms.
+
+\subsubsection{Using Nodes for Test Systems}
+The original idea behind adding nodes is to allow Jenkins to scale with the workload it has to do. As projects are added, one can add nodes (i.e. more build machines) allowing Jenkins to build more projects concurrently. Jenkin's project can also be explicitly 'labeled' to only be executed on a certain node. We capitalized both of these features to enable the aforementioned remote execution.
+
+For each HPC system login node, we created a Jenkins node\footnote{Do not be confused with multiple usage of the word ''node`` here. The former refers to the typical usage of login node in HPC. The latter refers to Jenkins' vernacular of ''node`` as previously defined}. We then labeled the (Jenkins) node with the name of the HPC system. For example, at NICS we have the labels 'beacon' and 'darter' to refer to the Cray CS-300 (Beacon) and XC-30 (Darter) login nodes, respectively. Each test application (i.e. ''project``) is then labeled to ensure that they only run on the appropriate node. For example, we have used NAMD (FIXME: Need reference for NAMD) as an applicaton test. We would create a Jenkin project called ''NAMD-Beacon`` and label it to only run on ''beacon`` node. We would also create another project called ''NAMD-Darter`` and label it appropriately. The two projects have slighly different build scripts (and possibly different test cases) so that they build correctly on the systems they were meant to run on.
+
+Jenkins nodes need to have a Java-based daemon (Jenkins' ''slave.jar``) to run which connect back to the master via a certain port (which is configurable). This can be considered a drawback. If the daemon somehow dies, it needs to be restarted. The daemon runs as regular user, the user which essentially runs the build and submit the jobs on the HPC system. In our case, we created a user called ''jenkins`` with the same privilege as any other regular user. Both the extra port opening and the daemon itself may be considered as attack vectors from security perspective. At NICS however we consider this to be acceptable because of other mitigation (which we will discussed later).
+
+The benefit of this method is that one can basically treat the nodes as local environment in Jenkins, while having access to the HPC environment. For example, each node would have access to the parallel lustre filesystem mounted by the HPC system (even if Jenkins master itself does not, being only a small separate VM). Each node can define its lustre filesystem as its build and test workspace. Yet Jenkins automatically manages all communication with the nodes such that files (e.g. plot data, test output) generated on the lustre filesystem is readable from Jenkins without the explicit remote copy (i.e. via SCP). Another example is that one can have Jenkins checkout or clone code from remote repository (e.g. using Subversion or Git) and the copy will be automatically available on the lustre filesystem defined as the workspace of that node. These benefits integration makes building Jenkins project more seamless.
+
+\subsubsection{Using SSH Plugins for Test Systems}
+The SSH plugin (FIXME: Need references) is another method for which one can access the HPC systems from Jenkins. As the name implies, Jenkins project with this type of build scripts simply SSH to the desired machine then execute the scripts there. 
+
+The benefit of this method is that it more closely mimmicks (FIXME; spelling) how real users access the HPC system. There is no need for additional daemon to run on the HPC login nodes and there is no need for the corresponding opening of port on Jenkins VM. Because NCSA and NICS systems utilize two-factor RSA one-time password for users login, we needed to make slight modification so that Jenkins can have automated login. The login nodes \texttt{/etc/ssh/sshd_config} was modified to allow ''Public Key Authentication`` from the Jenkins VM unique IP address. Pairs of SSH keys with passphrase were generated on Jenkins VM with their public keys deployed on the appropriate login nodes to allow for passwordless login. The SSH plugins allow one to manage which key (and passphrase) to use with which system. The keys on Jenkins VM are located under Jenkins home directory (by default \texttt{/var/lib/jenkins/.ssh}. Although configuring all of these could be somewhat tedious, once everything is set Jenkins should be able to run scripts on the intended HPC systems via SSH. For testing our setup, we created simple Jenkins projects whose task is to print out the \texttt{\$HOSTNAME} of the system.
+
+The drawback of this method is that one has to manage almost all data management explicitly. If one checks out or clones a repository on Jenkins (part of Jenkins core feature), it need to be explicitly copied (e.g. with \texttt{rsync} or \texttt{scp}) to the remote system. Any files generated by the tests that need to be read by Jenkins (e.g. plot file) needs to be copied back explicitly to the Jenkins VM. A related drawback is that one must explicitly ensure that the build environment is ''clean`` on the remote system (e.g. no left over files or data from previous run). This is because although Jenkins can clean up its workspace, this workspace (in Jenkins perspective) exists only on the VM. The remote systems' workspaces are out of reach from Jenkins. This drawback also prevents one to easily allow concurrent builds of the same project. 
 
 
+\subsection{Securing Jenkins Web Front-end}
 
+Jenkins comes with its own web server. Although Jenkins also has a command-line interface, the primary way to interact with Jenkins (configuring, setting up projects, running builds) is via a web browser. Although Jenkins web server may be sufficient for a setup in which Jenkins is only accessible in a secure, walled of, intranet environment, we feel that using a more secure, well-tested, production quality web server as its front end is warranted.
 
+We decided to use Apache HTTP Server as the front-end web server facing the world. To achieve that, first we set Jenkins web server to only listen to \texttt{localhost} interface on port 8080, by setting the following variable in Jenkins configuration file \texttt{/etc/sysconfig/jenkins}:
+\begin{lstlisting}
+#-- Restrict to only listen to localhost
+JENKINS_PORT="8080"
+JENKINS_LISTEN_ADDRESS=127.0.0.1
+\end{lstlisting}
 
-\subsection{Master-Node Configuration}
-We added a standard user account to our cluster that will execute the Jenkins tests. Unique ssh keys were generated on the Jenkins Server for accessing the user account on production and test environments.  The keys on the server are located in Jenkins home directory (/var/lib/jenkins/.ssh). Using the GUI management console, the keyfile location and passphrase was entered under Manage Jenkins, Configure System, SSH remote hosts section. A unique SSH site is configured for our TDS, production and development login nodes.   
+Second, we need to forward all HTTP requests to Jenkins, and also forward Jenkins responses back to the client. This is accomplished using the module \texttt{mod_proxy} (FIXME: Add Reference) in Apache HTTP which allow it to act as a proxy / gateway. To enable this feature, the following stanza is added to the configuration file \texttt{/etc/httpd/conf.d/ssl.conf} inside the \texttt{<VirtualHost>} directive:
 
-\subsection{Accessing Login Nodes}
-The ssh public key generated on Jenkins Server was deployed in the login node user account. The login node sshd_config was modified to allow Public Key Authentication from the Jenkins Server IP.     
+\begin{lstlisting}
+ProxyRequests       Off
+ProxyPreserveHost   On 
+AllowEncodedSlashes On 
+<Proxy *>
+  Order deny,allow
+  Allow from all  
+</Proxy>
+ProxyPass         /  http://localhost:8080/ nocanon
+ProxyPassReverse  /  http://localhost:8080/
+ProxyPassReverse  /  http://bwjenkins.ncsa.illinois.edu/
+RequestHeader set X-Forwarded-Proto "https"
+RequestHeader set X-Forwarded-Port "443"    
+\end{lstlisting}
+
+With this setup, all requests to the HTTP over SSL protocol (i.e. \texttt{https}) on port 443 by default) are forwarded to Jenkins server and Jenkins reponses are forwarded back to the client (i.e. web browser). 
+
+Optinally, one may allow non-authenticated, ''read-only`` access to Jenkins dashboard over regular (non-secure) HTTP connection. Jenkins' own authorization mechanism can be used to control this access, but we can also add Apache HTTP directives for further security, limiting \texttt{GET} requests. To achieve this, we created the file \texttt{/etc/httpd/conf.d/vhosts.conf} with the following content:
+\begin{lstlisting}
+ 
+NameVirtualHost *:80
+<VirtualHost *:80>
+
+  ServerAdmin tbouvet@illinois.edu
+  DocumentRoot /var/www/html
+  ServerName bwjenkins.ncsa.illinois.edu
+  Options Indexes FollowSymLinks
+
+  ProxyPass / http://localhost:8080/ nocanon
+  ProxyPassReverse  /  http://localhost:8080/
+  ProxyRequests Off
+  AllowEncodedSlashes On
+
+  LimitRequestBody 512
+  LimitRequestFields 15
+  LimitRequestFieldSize 1024
+  LimitRequestLine 128
+
+  <Location /asynchPeople/>
+    Order Deny,Allow
+    Deny from all
+  </Location>
+
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+    <LimitExcept GET>
+      Deny from all
+    </LimitExcept>
+  </Proxy>
+
+</VirtualHost>
+
+\end{lstlisting}
 
 
 \section{Authentication and Authorization}
 \label{sec:AuthenticationAuthorization}
 
 \subsection{Security Considerations}
-Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. Jenkins has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once signed in, you have full admin access to the Jenkins system instance.  This required us initially to test the deployment with our test and development (TDS) CRAY. This resulted in the following requirement: restricted OTP access to the physical system hosting Jenkins. In addition, OTP only access to the Jenkins GUI command console must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
+Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. It also has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once signed in, you have full admin access to the Jenkins system instance.  This required us initially to test the deployment with our TDS. This resulted in the following requirement: restricted OTP access to the physical system hosting Jenkins. In addition, OTP only access to the Jenkins GUI command console must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
 
 \subsection{Configuration Choices}
-The Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restrict access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  A reverse proxy was used to run Jenkins behind apache/http with SSL for access to the administrative console. All the configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
-
+The Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restrict access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  Jenkins is configured to listen on port 8080 by default and we restricted it to localhost only. A reverse proxy was configured to run Jenkins behind Apache HTTP Server and SSL for access to the administrative console. With this reverse proxy, apache accepts requests on port 80 and 443 of bwjenkins.ncsa.illinois.edu and forwards them to the jenkins web server at localhost which is now firewall protected. Most of this configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
 \begin{lstlisting}
+
+
+
+
+
+
+
+NOTE: Install mod_authnz_external Apache package
+
 (Jenkins sever configuration file snippets below)
+
 /etc/ssh/sshd_config:
 Match Host bwbh1.ncsa.illinois.edu,
 bwbh2.ncsa.illinois.edu
 HostbasedAuthentication yes
 
+
 /etc/sysconfig/iptables:
 -A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 -p tcp --dport 22 -j ACCEPT
 -A INPUT -s 172.16.0.0/15 -m state --state NEW -m tcp 
--p tcp --dport 22 -j ACCEPT *delete maybe*
--A INPUT  -m state --state NEW -m tcp -p tcp --dport 80 
+-p tcp --dport 22 -j ACCEPT 
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 
 -j ACCEPT
 -A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 -p tcp --dport 443 -j ACCEPT
 
+
 /etc/httpd/conf.d/ssl.conf:
  # -- The following sets ReverseProxy for Jenkins
-  ProxyRequests       Off
-  ProxyPreserveHost   On
-  AllowEncodedSlashes On
-  <Proxy *>
-    Order deny,allow
-    Allow from all
-  </Proxy>
-  ProxyPass       / http://localhost:8080/ nocanon
-  ProxyPassReverse / http://localhost:8080/
-  ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
-  RequestHeader set X-Forwarded-Proto "https"
-  RequestHeader set X-Forwarded-Port "443"
+ProxyRequests       Off
+ProxyPreserveHost   On
+AllowEncodedSlashes On
+<Proxy *>
+Order deny,allow
+Allow from all
+</Proxy>
+ProxyPass       / http://localhost:8080/ nocanon
+ProxyPassReverse / http://localhost:8080/
+ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
+RequestHeader set X-Forwarded-Proto "https"
+RequestHeader set X-Forwarded-Port "443"
 
- # -- The following sets OTP for Jenkins SSL connection
-  DefineExternalAuth pwauth+session pipe /usr/local/bin/
-  pwauth+session
-  <LocationMatch / > 
-    AuthType Basic
-    AuthBasicProvider external
-    AuthName "NCSA RSA OTP login" 
-    AuthExternal pwauth+session
-    require valid-user
-    
-    RequestHeader unset "X-Forwarded-User"
-    RequestHeader set "X-Forwarded-User" (REMOTE_USER)
+ # -- OTP for Jenkins SSL connection
+DefineExternalAuth pwauth+session pipe 
+/usr/local/bin/pwauth+session
+<LocationMatch / > 
+AuthType Basic
+AuthBasicProvider external
+AuthName "NCSA RSA OTP login" 
+AuthExternal pwauth+session
+require valid-user  
+RequestHeader unset "X-Forwarded-User"
+RequestHeader set "X-Forwarded-User" (REMOTE_USER)
+</LocationMatch>
+ 
 
-  </LocationMatch>
+/usr/local/bin/pwauth+session(OTP caching): 
+https://github.com/reubendb/BasicAuthOTPSession
+/blob/master/BasicAuthOTPSession.py#L1
+
   
- /usr/local/bin/pwauth+session: https://github.com/reubendb/
- BasicAuthOTPSession/blob/master/BasicAuthOTPSession.py#L1
+/etc/pam.d/pwauth (for OTP):
+ #%PAM-1.0
+auth  required  /lib64/security/pam_securid.so
+account  include  password-auth
+
+
+/etc/sysconfig/jenkins (restrict to localhost):
+JENKINS_PORT="8080"
+JENKINS_LISTEN_ADDRESS=127.0.0.1
 \end{lstlisting}
-\subsection{LDAP with Jenkins}
+\subsection{LDAP with Jenkins} 
+%To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, then select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{LDAP-Jenkins}
@@ -198,8 +285,7 @@ HostbasedAuthentication yes
 \label{fig:LDAP-Jenkins}
 \end{figure}
 To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, then select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.\\
-\\
-My first stab at this failed as an anonymous connection to our LDAP because we are using a local CA.
+At first this failed because our LDAP is using a local CA.
 WARNING: Failed to search LDAP for username, 
 sun.security.provider.certpath.SunCertPathBuilderException:
 unable to find valid certification path to requested target\\
@@ -365,6 +451,10 @@ The initial display tabs in our Jenkins instance are used to group tests and we 
 \end{itemize}
 
 \section{Conclusion}
+\label{sec:conclusion}
+
+We typically run the latest Programming Environment (PE) on our TDS. Our production login nodes and the supercomputer have the latest PE installed as non default during initial testing and it can be loaded by modulefile selection. Our test login node (Bright Cluster Provisioned EsLogin) is utilized for testing new software stacks and changes to the login environment that are independent of our production resources. Therefore Jenkins Projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments.   
+
 \subsection{reproducibility and regression testing}
 Jenkins provides the framework we need to maintain tests in a consistent fashion and track the results over time (logs and plots ).  Tests typically are not changed so that we get apples-apples comparisons.  When a new test is needed for a particular activity, we attempt to derive it from an existing test to maintain consistency and simplify test creation.  Reusable test components (watchdog scripts, plotting metrics) are employed to make construction of completely new tests straightforward.
 \subsection{rapid reaction}
@@ -374,11 +464,11 @@ The notification feature keeps test owners engaged in the testing activity of Je
 Transient errors with Jenkins sometimes occur--particularly with the Jenkins ssh subsystem.  It's not unusual to get ssh failure rates of 1/100 which are completely transient (immediately running the test again manually clears the issue on the dashboard).
 \subsubsection{test scale and frequency}
 There is some subjectivity in the frequency and scale (resource utilization) of tests.  Testing too often, too large, or some combination of the two may perturb the system such that other tests are impacted or create bottlenecks in the system for the real user community.  This is the primary reason we require peer review for new tests.
-\label{sec:conclusion}
+
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
-This research used resources at the National Institute for Computational Sciences and the National Center for Supercomputing Applications, funded by the National Science Foundation (NSF).
+This research used resources at the National Institute for Computational Sciences (NICS) and the National Center for Supercomputing Applications (NCSA), funded by the National Science Foundation (NSF).
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
