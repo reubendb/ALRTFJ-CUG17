@@ -149,10 +149,72 @@ The drawback of this method is that one has to manage almost all data management
 
 Jenkins comes with its own web server. Although Jenkins also has a command-line interface, the primary way to interact with Jenkins (configuring, setting up projects, running builds) is via a web browser. Although Jenkins web server may be sufficient for a setup in which Jenkins is only accessible in a secure, walled of, intranet environment, we feel that using a more secure, well-tested, production quality web server as its front end is warranted.
 
-We decided to use Apache HTTPD Server as the front-end web server facing the world. To achieve that, first we set Jenkins web server to only listen to \texttt{localhost} interface on port 8080, by setting the following variable in Jenkins configuration file \texttt{/etc/sysconfig/jenkins}:
-FIXME: COPY RELEvANT JENKINS CONFIG HERE
+We decided to use Apache HTTP Server as the front-end web server facing the world. To achieve that, first we set Jenkins web server to only listen to \texttt{localhost} interface on port 8080, by setting the following variable in Jenkins configuration file \texttt{/etc/sysconfig/jenkins}:
+\begin{lstlisting}
+#-- Restrict to only listen to localhost
+JENKINS_PORT="8080"
+JENKINS_LISTEN_ADDRESS=127.0.0.1
+\end{lstlisting}
 
-Second, we need to forward all HTTP requests to Jenkins, and also forward Jenkins responses back to the client. This is a feature called ''ReverseProxy`` in Apache HTTPD. Th
+Second, we need to forward all HTTP requests to Jenkins, and also forward Jenkins responses back to the client. This is accomplished using the module \texttt{mod_proxy} (FIXME: Add Reference) in Apache HTTP which allow it to act as a proxy / gateway. To enable this feature, the following stanza is added to the configuration file \texttt{/etc/httpd/conf.d/ssl.conf} inside the \texttt{<VirtualHost>} directive:
+
+\begin{lstlisting}
+ProxyRequests       Off
+ProxyPreserveHost   On 
+AllowEncodedSlashes On 
+<Proxy *>
+  Order deny,allow
+  Allow from all  
+</Proxy>
+ProxyPass         /  http://localhost:8080/ nocanon
+ProxyPassReverse  /  http://localhost:8080/
+ProxyPassReverse  /  http://bwjenkins.ncsa.illinois.edu/
+RequestHeader set X-Forwarded-Proto "https"
+RequestHeader set X-Forwarded-Port "443"    
+\end{lstlisting}
+
+With this setup, all requests to the HTTP over SSL protocol (i.e. \texttt{https}) on port 443 by default) are forwarded to Jenkins server and Jenkins reponses are forwarded back to the client (i.e. web browser). 
+
+Optinally, one may allow non-authenticated, ''read-only`` access to Jenkins dashboard over regular (non-secure) HTTP connection. Jenkins' own authorization mechanism can be used to control this access, but we can also add Apache HTTP directives for further security, limiting \texttt{GET} requests. To achieve this, we created the file \texttt{/etc/httpd/conf.d/vhosts.conf} with the following content:
+\begin{lstlisting}
+ 
+NameVirtualHost *:80
+<VirtualHost *:80>
+
+  ServerAdmin tbouvet@illinois.edu
+  DocumentRoot /var/www/html
+  ServerName bwjenkins.ncsa.illinois.edu
+  Options Indexes FollowSymLinks
+
+  ProxyPass / http://localhost:8080/ nocanon
+  ProxyPassReverse  /  http://localhost:8080/
+  ProxyRequests Off
+  AllowEncodedSlashes On
+
+  LimitRequestBody 512
+  LimitRequestFields 15
+  LimitRequestFieldSize 1024
+  LimitRequestLine 128
+
+  <Location /asynchPeople/>
+    Order Deny,Allow
+    Deny from all
+  </Location>
+
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+    <LimitExcept GET>
+      Deny from all
+    </LimitExcept>
+  </Proxy>
+
+</VirtualHost>
+
+\end{lstlisting}
+
+
+
 
 % FIXME: CONSIDER DELETING THIS SECTION SINCE IT HAS BEEN INCORPORATED ABOVE
 %\subsection{Master-Node Configuration NCSA}
