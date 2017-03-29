@@ -114,14 +114,14 @@ The original idea behind adding nodes is to allow Jenkins to scale with the work
 
 For each HPC system login node, we created a Jenkins node\footnote{Do not be confused with multiple usage of the word ''node`` here. The former refers to the typical usage of a login node in HPC. The latter refers to Jenkins' vernacular of ''node`` as previously defined}. We then labeled the (Jenkins) node with the name of the HPC system. For example, at NICS we have the labels 'beacon' and 'darter' to refer to the Cray CS-300 (Beacon) and XC-30 (Darter) login nodes, respectively. Each test application (i.e. ''project``) is then labeled to ensure that they only run on the appropriate node. For example, we have used NAMD (FIXME: Need reference for NAMD) as an application test. We would create a Jenkins project called ''NAMD-Beacon`` and label it to run only on the ''beacon`` node. We would also create another project called ''NAMD-Darter`` and label it appropriately. The two projects have slightly different build scripts (and possibly different test cases) so that they build correctly on the systems where they were meant to run.
 
-Jenkins nodes need to have a Java-based daemon (Jenkins' ''slave.jar``) to run which connects back to the master via a certain port (which is configurable). This can be considered a drawback. If the daemon somehow dies, it needs to be restarted. The daemon runs as regular user, the user which essentially runs the build and submits the jobs on the HPC system. In our case, we created a user called ''jenkins`` with the same privilege as any other regular user. Both the extra port opening and the daemon itself may be considered as attack vectors from a security perspective. At NICS however we consider this to be acceptable because of other mitigation (which we will discuss later).
+Jenkins nodes need to have a Java-based daemon (Jenkins' ''slave.jar``) to run which connects back to the master via a certain port (which is configurable). This can be considered a drawback. If the daemon somehow dies, it needs to be restarted. The daemon runs as regular user, the user which essentially runs the build and submits the jobs on the HPC system. In our case, we created a NICS user called ''jenkins`` with the same privilege as any other regular user. Both the extra port opening and the daemon itself may be considered as attack vectors from a security perspective. At NICS however we consider this to be acceptable because of other mitigation (which we will discuss later).
 
 The benefit of this method is that one can basically treat the nodes as a local environment in Jenkins, while having access to the HPC environment. For example, each node would have access to the parallel lustre filesystem mounted by the HPC system (even if Jenkins master itself does not, being only a small separate VM). Each node can define its lustre filesystem as its build and test workspace. Yet Jenkins automatically manages all communication with the nodes such that files (e.g. plot data, test output) generated on the lustre filesystem are readable from Jenkins without the explicit remote copy (i.e. via SCP). Another example is that one can have Jenkins checkout or clone code from remote a repository (e.g. using Subversion or Git) and the copy will be automatically available on the lustre filesystem defined as the workspace of that node. These integration benefits make building Jenkins projects more seamless.
 
 \subsubsection{Using SSH Plugins for Test Systems}
 The SSH plugin (FIXME: Need references) is another method for which one can access the HPC systems from Jenkins. As the name implies, Jenkins projects with these type of build scripts simply SSH to the desired machine then execute the scripts there. 
 
-The benefit of this method is that it more closely mimicks the way real users access the HPC system. There is no need for an additional daemon to run on the HPC login nodes and there is no need for the corresponding opening of a port on the Jenkins VM. Because NCSA and NICS systems utilize two-factor RSA one-time password for user login, we needed to make slight modification so that Jenkins can have automated logins. The login node's \texttt{/etc/ssh/sshd_config} was modified to allow ''Public Key Authentication`` from the Jenkins VM unique IP address. Pairs of SSH keys with passphrase were generated on the Jenkins VM with their public keys deployed on the appropriate login nodes to allow for passwordless login. The SSH plugins allow one to manage which key (and passphrase) to use with which system. The keys on the Jenkins VM are located under the Jenkins home directory (by default \texttt{/var/lib/jenkins/.ssh}. Although configuring all of these can be somewhat tedious, once everything is set Jenkins should be able to run scripts on the intended HPC systems via SSH. For testing our setup, we created simple Jenkins projects whose task is to print out the \texttt{\$HOSTNAME} of the system.
+The benefit of this method is that it more closely mimicks the way real users access the HPC system. There is no need for an additional daemon to run on the HPC login nodes and there is no need for the corresponding opening of a port on the Jenkins VM. Because NCSA and NICS systems utilize two-factor RSA one-time password for user login, one must make a slight modification so that Jenkins can have automated logins. The NCSA login node's \texttt{/etc/ssh/sshd_config} was modified to allow ''Public Key Authentication`` from the Jenkins VM unique IP address. We created an NCSA user called ''bwjenkins`` with standard user privilege. Pairs of SSH keys with passphrase were generated on the Jenkins VM with their public keys deployed on the appropriate login nodes in the bwjenkins user account to allow passwordless login. The SSH plugins allow one to manage which key (and passphrase) to use with which system. The keys on the Jenkins VM are located under the Jenkins home directory (by default \texttt{/var/lib/jenkins/.ssh}. Although this configuration can be somewhat tedious, when complete, Jenkins will be able to run scripts on the intended HPC systems via SSH. For testing our setup, we created simple Jenkins projects whose task is to print out the \texttt{\$HOSTNAME} of the system.
 
 The drawback of this method is that one has to manage almost all data management explicitly. If one checks out or clones a repository on Jenkins (part of Jenkins core feature), it needs to be explicitly copied (e.g. with \texttt{rsync} or \texttt{scp}) to the remote system. Any files generated by the tests that need to be read by Jenkins (e.g. plot file) have to be copied back explicitly to the Jenkins VM. A related drawback is that one must explicitly ensure that the build environment is ''clean`` on the remote system (e.g. no left over files or data from previous run). This is because although Jenkins can clean up its workspace, this workspace (in Jenkins perspective) exists only on the VM. The remote systems' workspaces are out of the reach of Jenkins. This drawback also prevents one to easily allow concurrent builds of the same project. 
 
@@ -154,7 +154,37 @@ RequestHeader set X-Forwarded-Proto "https"
 RequestHeader set X-Forwarded-Port "443"    
 \end{lstlisting}
 
-With this setup, all requests to the HTTP over SSL protocol (i.e. \texttt{https}) on port 443 by default) are forwarded to the Jenkins server and Jenkins responses are forwarded back to the client (i.e. web browser). 
+In addition, we restrict connections to OTP using pwauth and session control which is also in the configuration file \texttt{/etc/httpd/conf.d/ssl.conf} inside the \texttt{<VirtualHost>} directive:
+\begin{lstlisting}
+# -- OTP for Jenkins SSL connection
+DefineExternalAuth pwauth+session pipe 
+/usr/local/bin/pwauth+session
+<LocationMatch / > 
+AuthType Basic
+AuthBasicProvider external
+AuthName "NCSA RSA OTP login" 
+AuthExternal pwauth+session
+require valid-user  
+RequestHeader unset "X-Forwarded-User"
+RequestHeader set "X-Forwarded-User" (REMOTE_USER)
+</LocationMatch>
+\end{lstlisting}
+
+The session control was implemented with a custom python script available here:
+\begin{lstlisting}
+/usr/local/bin/pwauth+session(OTP caching): 
+https://github.com/reubendb/BasicAuthOTPSession
+/blob/master/BasicAuthOTPSession.py#L1
+\end{lstlisting}
+
+OTP is configured by \texttt{/etc/pam.d/pwath}: 
+\begin{lstlisting}
+ #%PAM-1.0
+auth  required  /lib64/security/pam_securid.so
+account  include  password-auth
+\end{lstlisting}
+
+With this setup, all OTP requests to the HTTP over SSL protocol (i.e. \texttt{https}) on port 443 by default) are forwarded to the Jenkins server and Jenkins responses are forwarded back to the client (i.e. web browser). 
 
 Optionally, one may allow non-authenticated, ''read-only`` access to the Jenkins dashboard over regular (non-secure) HTTP connections. Jenkins' own authorization mechanism can be used to control this access, but we can also add Apache HTTP directives for further security, limiting \texttt{GET} requests. To achieve this, we created the file \texttt{/etc/httpd/conf.d/vhosts.conf} with the following content:
 \begin{lstlisting}
@@ -198,85 +228,78 @@ NameVirtualHost *:80
 \section{Authentication and Authorization}
 \label{sec:AuthenticationAuthorization}
 
-\subsection{Security Considerations}
-CUT THE NEXT TWO PARAGRAPHS AND DESCRIPTION OF CONFIG FILES OR REDUCE SINCE IT IS COVERED ABOVE --GALEN
-Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. It also has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once signed in, you have full admin access to the Jenkins system instance.  This required us initially to test the deployment with our TDS. This resulted in the following requirement: restricted OTP access to the physical system hosting Jenkins. In addition, OTP only access to the Jenkins GUI command console must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
+%\subsection{Security Considerations}
+%CUT THE NEXT TWO PARAGRAPHS AND DESCRIPTION OF CONFIG FILES OR REDUCE SINCE IT IS COVERED ABOVE --GALEN
+%Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. Blue Waters is an OTP only restricted access system. Jenkins has the ability to execute user-level commands on our login nodes. It also has some unfortunate default settings. The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once signed in, you have full admin access to the Jenkins system instance.  This required us initially to test the deployment with our TDS. This resulted in the following requirement: restricted OTP access to the physical system hosting Jenkins. In addition, OTP only access to the Jenkins GUI command console must be contained within our IP space.  The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
 
-\subsection{Configuration Choices}
-The Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restrict access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  Jenkins is configured to listen on port 8080 by default and we restricted it to localhost only. A reverse proxy was configured to run Jenkins behind Apache HTTP Server and SSL for access to the administrative console. With this reverse proxy, apache accepts requests on port 80 and 443 of bwjenkins.ncsa.illinois.edu and forwards them to the Jenkins web server at localhost which is now firewall protected. Most of this configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
-\begin{lstlisting}
+%\subsection{Configuration Choices}
+%The Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restrict access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  Jenkins is configured to listen on port 8080 by default and we restricted it to localhost only. A reverse proxy was configured to run Jenkins behind Apache HTTP Server and SSL for access to the administrative console. With this reverse proxy, apache accepts requests on port 80 and 443 of bwjenkins.ncsa.illinois.edu and forwards them to the Jenkins web server at localhost which is now firewall protected. Most of this configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
 
+%\begin{lstlisting}
+%NOTE: Install mod_authnz_external Apache package
 
+%(Jenkins sever configuration file snippets below)
 
-
-
-
-
-NOTE: Install mod_authnz_external Apache package
-
-(Jenkins sever configuration file snippets below)
-
-/etc/ssh/sshd_config:
-Match Host bwbh1.ncsa.illinois.edu,
-bwbh2.ncsa.illinois.edu
-HostbasedAuthentication yes
+%/etc/ssh/sshd_config:
+%Match Host bwbh1.ncsa.illinois.edu,
+%bwbh2.ncsa.illinois.edu
+%HostbasedAuthentication yes
 
 
-/etc/sysconfig/iptables:
--A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
--p tcp --dport 22 -j ACCEPT
--A INPUT -s 172.16.0.0/15 -m state --state NEW -m tcp 
--p tcp --dport 22 -j ACCEPT 
--A INPUT -m state --state NEW -m tcp -p tcp --dport 80 
--j ACCEPT
--A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
--p tcp --dport 443 -j ACCEPT
+%/etc/sysconfig/iptables:
+%-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
+%-p tcp --dport 22 -j ACCEPT
+%-A INPUT -s 172.16.0.0/15 -m state --state NEW -m tcp 
+%-p tcp --dport 22 -j ACCEPT 
+%-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 
+%-j ACCEPT
+%-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
+%-p tcp --dport 443 -j ACCEPT
 
+%/etc/httpd/conf.d/ssl.conf:
+% # -- The following sets ReverseProxy for Jenkins
+%ProxyRequests       Off
+%ProxyPreserveHost   On
+%AllowEncodedSlashes On
+%<Proxy *>
+%Order deny,allow
+%Allow from all
+%</Proxy>
+%ProxyPass       / http://localhost:8080/ nocanon
+%ProxyPassReverse / http://localhost:8080/
+%ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
+%RequestHeader set X-Forwarded-Proto "https"
+%RequestHeader set X-Forwarded-Port "443"
 
-/etc/httpd/conf.d/ssl.conf:
- # -- The following sets ReverseProxy for Jenkins
-ProxyRequests       Off
-ProxyPreserveHost   On
-AllowEncodedSlashes On
-<Proxy *>
-Order deny,allow
-Allow from all
-</Proxy>
-ProxyPass       / http://localhost:8080/ nocanon
-ProxyPassReverse / http://localhost:8080/
-ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
-RequestHeader set X-Forwarded-Proto "https"
-RequestHeader set X-Forwarded-Port "443"
-
- # -- OTP for Jenkins SSL connection
-DefineExternalAuth pwauth+session pipe 
-/usr/local/bin/pwauth+session
-<LocationMatch / > 
-AuthType Basic
-AuthBasicProvider external
-AuthName "NCSA RSA OTP login" 
-AuthExternal pwauth+session
-require valid-user  
-RequestHeader unset "X-Forwarded-User"
-RequestHeader set "X-Forwarded-User" (REMOTE_USER)
-</LocationMatch>
- 
-
-/usr/local/bin/pwauth+session(OTP caching): 
-https://github.com/reubendb/BasicAuthOTPSession
-/blob/master/BasicAuthOTPSession.py#L1
-
-  
-/etc/pam.d/pwauth (for OTP):
- #%PAM-1.0
-auth  required  /lib64/security/pam_securid.so
-account  include  password-auth
-
-
-/etc/sysconfig/jenkins (restrict to localhost):
-JENKINS_PORT="8080"
-JENKINS_LISTEN_ADDRESS=127.0.0.1
-\end{lstlisting}
+%\begin{lstlisting}
+% # -- OTP for Jenkins SSL connection
+%DefineExternalAuth pwauth+session pipe 
+%/usr/local/bin/pwauth+session
+%<LocationMatch / > 
+%AuthType Basic
+%AuthBasicProvider external
+%AuthName "NCSA RSA OTP login" 
+%AuthExternal pwauth+session
+%require valid-user  
+%RequestHeader unset "X-Forwarded-User"
+%RequestHeader set "X-Forwarded-User" (REMOTE_USER)
+%</LocationMatch>
+ %
+%
+%/usr/local/bin/pwauth+session(OTP caching): 
+%https://github.com/reubendb/BasicAuthOTPSession
+%/blob/master/BasicAuthOTPSession.py#L1
+%
+ % 
+%/etc/pam.d/pwauth (for OTP):
+ %#%PAM-1.0
+%auth  required  /lib64/security/pam_securid.so
+%account  include  password-auth
+%\end{lstlisting}
+%/etc/sysconfig/jenkins (restrict to localhost):
+%JENKINS_PORT="8080"
+%JENKINS_LISTEN_ADDRESS=127.0.0.1
+%\end{lstlisting}
 \subsection{LDAP with Jenkins} 
 %To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, then select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.
 \begin{figure}[H]
@@ -303,7 +326,7 @@ Certificate was added to keystore
 \caption{ Configure Global Security }
 \label{fig:Configure-Global-Security}
 \end{figure}
-We are allowing access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting each other's jobs. 
+We allow access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting each other's jobs. 
 
 \section{Anatomy of A Test}
 \label{sec:TestAnatomy}
