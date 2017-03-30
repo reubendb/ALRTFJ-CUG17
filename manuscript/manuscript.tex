@@ -154,7 +154,7 @@ RequestHeader set X-Forwarded-Proto "https"
 RequestHeader set X-Forwarded-Port "443"    
 \end{lstlisting}
 
-In addition, we restrict connections to OTP using pwauth and session control which is also in the configuration file \texttt{/etc/httpd/conf.d/ssl.conf} inside the \texttt{<VirtualHost>} directive:
+In addition, we restrict connections to OTP using pwauth and session control. This is accomplished using the Apache module \texttt{mod_authnz_external} (FIXME: Add Reference) which is also in the configuration file \texttt{/etc/httpd/conf.d/ssl.conf} inside the \texttt{<VirtualHost>} directive:
 \begin{lstlisting}
 # -- OTP for Jenkins SSL connection
 DefineExternalAuth pwauth+session pipe 
@@ -170,18 +170,25 @@ RequestHeader set "X-Forwarded-User" (REMOTE_USER)
 </LocationMatch>
 \end{lstlisting}
 
-The session control was implemented with a custom python script available here:
+Pwauth is called by \texttt{/etc/htpd/conf.d/authnz_external.conf}: 
 \begin{lstlisting}
-/usr/local/bin/pwauth+session(OTP caching): 
-https://github.com/reubendb/BasicAuthOTPSession
-/blob/master/BasicAuthOTPSession.py#L1
+LoadModule authnz_external_module modules/mod_authnz_external.so
+DefineExternalAuth pwauth pipe /usr/bin/pwauth
+DefineExternalAuth pwauth+sssion pipe /usr/local/bin/pwauth+session
 \end{lstlisting}
 
-OTP is configured by \texttt{/etc/pam.d/pwath}: 
+OTP is specified in \texttt{/etc/pam.d/pwauth}:
 \begin{lstlisting}
- #%PAM-1.0
-auth  required  /lib64/security/pam_securid.so
-account  include  password-auth
+#%PAM-1.0
+auth	   required	/lib64/security/pam_securid.so
+account    include      password-auth
+\end{lstlisting}
+
+The session control was implemented with a custom python script available here:
+\begin{lstlisting}
+/usr/local/bin/pwauth+session: 
+https://github.com/reubendb/BasicAuthOTPSession
+/blob/master/BasicAuthOTPSession.py#L1
 \end{lstlisting}
 
 With this setup, all OTP requests to the HTTP over SSL protocol (i.e. \texttt{https}) on port 443 by default) are forwarded to the Jenkins server and Jenkins responses are forwarded back to the client (i.e. web browser). 
