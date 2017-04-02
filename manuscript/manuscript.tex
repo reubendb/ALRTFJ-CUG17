@@ -57,7 +57,7 @@ The University of Tennessee, Knoxville, TN 37996\\
 \thispagestyle{plain}
 
 \begin{abstract}
-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA'€™s Blue Waters. 
+This paper explores the challenges of regression testing and monitoring of large scale systems such as NCSA's Blue Waters. 
 Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. 
 Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. 
 We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). 
@@ -432,25 +432,6 @@ Successful tests save plot files and contribute a new data point to a plot.
 \subsection{email notification}
 When the state of a test changes, email notification is sent to the test owner. 
  As a best practice we also use the email notification as a method of tracking authorship and each test has an email owner even if notifications are disabled for the test.
-
-
-\section{SWTools Integration}
-\label{sec:SWToolsIntegration}
-\subsection{SWTools with Jenkins}
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=0.5\textwidth]{swtools-Jenkins}
-%\caption{ Use SWTools with Jenkins }
-%\label{fig:swtools-jenkins}
-%\end{figure}
-
-\subsection{SWTools with Lammps}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{swtools-lammps}
-\caption{ SWTools with Lammps }
-\label{fig:swtools-lammps}
-\end{figure}
 
 \section{Use Cases}
 \label{sec:results}
