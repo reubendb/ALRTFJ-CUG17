@@ -297,7 +297,7 @@ NameVirtualHost *:80
 
 \end{lstlisting}
 
-\section{Authenticating with One-Time Password}
+\subsection{Authenticating with One-Time Password}
 
 Although Jenkins supplies its own authentication mechanism with its built-in user and password database, we feel that it is inadequate for securing our instance. 
 The default Jenkins authentication setup is also unfortunate, in which it allows anyone to self-register creating their own username and password \footnote{This is perhaps another artifact of Jenkins setup intended to intranet environment.} 
@@ -337,7 +337,8 @@ Most of the configuration is defined in the file \texttt{/etc/httpd/conf.d/ssl.c
 
 \begin{lstlisting}
 #-- OTP for Jenkins SSL connection
-DefineExternalAuth pwauth+session pipe /usr/local/bin/BasicAuthOTPSession.py
+DefineExternalAuth pwauth+session pipe 
+  /usr/local/bin/BasicAuthOTPSession.py
 
 <LocationMatch / > 
   AuthType Basic
@@ -352,36 +353,36 @@ DefineExternalAuth pwauth+session pipe /usr/local/bin/BasicAuthOTPSession.py
 \end{lstlisting}
 The \texttt{<LocationMatch / >} directive ensures that every request to the secure HTTP site is authenticated. 
 
-\section{Authentication and Authorization}
-\label{sec:AuthenticationAuthorization}
+\subsection{Authorization and Access Control}
+\label{subsec:authorization}
 
-%\subsection{Security Considerations}
-%CUT THE NEXT TWO PARAGRAPHS AND DESCRIPTION OF CONFIG FILES OR REDUCE SINCE IT IS COVERED ABOVE --GALEN
-%Enabling Jenkins access to Blue Waters posed some unique security hurdles that we had to overcome. 
-%Blue Waters is an OTP only restricted access system. 
-%Jenkins has the ability to execute user-level commands on our login nodes. 
-%It also has some unfortunate default settings. 
-%The access control is set to "Jenkins' own user database," and the "Allow users to sign up" option is enabled, so if you don't have an account, you can create one by providing your name, e-mail and a password. 
-%Additionally, there's an authorization option enabled which says "Logged-in users can do anything." So, once signed in, you have full admin access to the Jenkins system instance. 
-% This required us initially to test the deployment with our TDS. 
-%This resulted in the following requirement: restricted OTP access to the physical system hosting Jenkins. 
-%In addition, OTP only access to the Jenkins GUI command console must be contained within our IP space. 
-% The Jenkins GUI will also restrict the command console access to our Blue Waters LDAP server. 
+Jenkins default authorization allows logged in (authenticated) users to have full control. 
+We wanted a more fine-grained access control to our instance and therefore selected the ''matrix-based security`` option (see Figure \ref{fig:jenkinsAuthorization}). Using this option we can limit what access individual users and groups have to our Jenkins instance. 
+For example we restrict most users (other than admin users) from having the ''Job Delete`` permission to prevent one user or group from deleting each other's jobs. 
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{Configure-Global-Security}
+\caption{Jenkins fine-grained authorization.}
+\label{fig:jenkinsAuthorization}
+\end{figure}
 
-%\subsection{Configuration Choices}
-%The Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. The VM allows restricted host-based ssh access from two secure OTP only administrative systems. The Jenkins GUI presented additional challenges. The Jenkins GUI is configured to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. We restrict access to the physical VM (bwjenkins) and the Jenkins GUI utilizing iptables, SSL and OTP.  Jenkins is configured to listen on port 8080 by default and we restricted it to localhost only. A reverse proxy was configured to run Jenkins behind Apache HTTP Server and SSL for access to the administrative console. With this reverse proxy, apache accepts requests on port 80 and 443 of bwjenkins.ncsa.illinois.edu and forwards them to the Jenkins web server at localhost which is now firewall protected. Most of this configuration is in /etc/httpd/conf.d/ssl.conf. Anonymous access to the Jenkins GUI was allowed for limited read only view of test status and historical plots. The Anonymous access view is not restricted. 
+We use the built-in LDAP plugin to query our LDAP server what group a user belongs to.
+This greatly simplifies managing the authorization since it can be done based on groups rather than just individual users. 
+The LDAP plugins gets the user information from the HTTP header passed by the reverse proxy set up. 
+Figure \ref{fig:LDAP-Jenkins} shows the screenshot of our LDAP configuration within Jenkins interface.
 
-%\begin{lstlisting}
-%NOTE: Install mod_authnz_external Apache package
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{LDAP-Jenkins}
+\caption{Using LDAP with Jenkins.}
+\label{fig:LDAP-Jenkins}
+\end{figure}
 
-%(Jenkins sever configuration file snippets below)
-
-%/etc/ssh/sshd_config:
-%Match Host bwbh1.ncsa.illinois.edu,
-%bwbh2.ncsa.illinois.edu
-%HostbasedAuthentication yes
-
+Since Jenkins allows one to enter arbitrarily command to be executed on login nodes, we want to further mitigate security risk via firewall rules. 
+In our installation, we only allow IP address originating from our institution block to access the secure HTTP portion and authenticate to access Jenkins. 
+At NCSA, the non secure, read-only, HTTP portion is accessible from anywhere. 
+At NICS, this access is only allowed from the institution IP block only. 
 
 %/etc/sysconfig/iptables:
 %-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
@@ -392,78 +393,6 @@ The \texttt{<LocationMatch / >} directive ensures that every request to the secu
 %-j ACCEPT
 %-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 %-p tcp --dport 443 -j ACCEPT
-
-%/etc/httpd/conf.d/ssl.conf:
-% # -- The following sets ReverseProxy for Jenkins
-%ProxyRequests       Off
-%ProxyPreserveHost   On
-%AllowEncodedSlashes On
-%<Proxy *>
-%Order deny,allow
-%Allow from all
-%</Proxy>
-%ProxyPass       / http://localhost:8080/ nocanon
-%ProxyPassReverse / http://localhost:8080/
-%ProxyPassReverse / http://bwjenkins.ncsa.illinois.edu/
-%RequestHeader set X-Forwarded-Proto "https"
-%RequestHeader set X-Forwarded-Port "443"
-
-%\begin{lstlisting}
-% # -- OTP for Jenkins SSL connection
-%DefineExternalAuth pwauth+session pipe 
-%/usr/local/bin/pwauth+session
-%<LocationMatch / > 
-%AuthType Basic
-%AuthBasicProvider external
-%AuthName "NCSA RSA OTP login" 
-%AuthExternal pwauth+session
-%require valid-user  
-%RequestHeader unset "X-Forwarded-User"
-%RequestHeader set "X-Forwarded-User" (REMOTE_USER)
-%</LocationMatch>
- %
-%
-%/usr/local/bin/pwauth+session(OTP caching): 
-%https://github.com/reubendb/BasicAuthOTPSession
-%/blob/master/BasicAuthOTPSession.py#L1
-%
- % 
-%/etc/pam.d/pwauth (for OTP):
- %#%PAM-1.0
-%auth  required  /lib64/security/pam_securid.so
-%account  include  password-auth
-%\end{lstlisting}
-%/etc/sysconfig/jenkins (restrict to localhost):
-%JENKINS_PORT="8080"
-%JENKINS_LISTEN_ADDRESS=127.0.0.1
-%\end{lstlisting}
-\subsection{LDAP with Jenkins} 
-%To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, then select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{LDAP-Jenkins}
-\caption{ Use LDAP with Jenkins }
-\label{fig:LDAP-Jenkins}
-\end{figure}
-To enable LDAP, the LDAP Plugin was installed. To configure, from the console view, select Manage Jenkins, then select Configure Global Security. In the Security Realm section select the Advanced... tab. Input your LDAP server name and root DN. Click the Test Button.\\
-At first this failed because our LDAP is using a local CA.
-WARNING: Failed to search LDAP for username, 
-sun.security.provider.certpath.SunCertPathBuilderException:
-unable to find valid certification path to requested target\\
-\\
-We had to add our certificate to the keystore:
-/usr/java/default/jre/bin/keytool -list -keystore cacerts -imle /etc/openldap/cacerts/cacert.pem
-Enter keystore password: Trust this certificate? [no]:  yes\\
-Certificate was added to keystore
-
-\subsection{Configure Global Security}
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{Configure-Global-Security}
-\caption{ Configure Global Security }
-\label{fig:Configure-Global-Security}
-\end{figure}
-We allow access by username and LDAP groups. The permissions can be scoped for individuals and groups. An example is removing Job delete permissions to prevent one user or group from deleting each other's jobs. 
 
 \section{Anatomy of A Test}
 \label{sec:TestAnatomy}
