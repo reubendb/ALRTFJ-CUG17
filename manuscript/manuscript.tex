@@ -95,7 +95,7 @@ We chose Jenkins as the tool for our regression testing framework because of its
 
 In this paper we describe in detail our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Water supercomputer at the National Center for Supercomputing Applications (NCSA), Darter and Beacon at the National Institute for Computational Sciences (NICS). 
 These systems are Cray XE, XK, XC, and CS series. 
-The outline of this paper is as follows. In \S \ref{sec:JenkinsConfiguration} we describe in details how we configure Jenkins for our deployment. In 
+The outline of this paper is as follows. In section \ref{sec:JenkinsConfiguration} we describe in details how we configure Jenkins for our deployment. This is followed by a brief description what an application test consist of in section \ref{sec:TestAnatomy}. Section \ref{sec:UseCases} shows some use cases and results from applications we have used to monitor our systems. We end the paper with concluding remarks in section \ref{sec:Conclusion}.
 
 
 \section{Jenkins Configuration}
@@ -401,7 +401,7 @@ When the state of a test changes, email notification is sent to the test owner.
  As a best practice we also use the email notification as a method of tracking authorship and each test has an email owner even if notifications are disabled for the test.
 
 \section{Use Cases}
-\label{sec:results}
+\label{sec:UseCases}
 \subsection{IOR Lustre scratch test}
 We created Jenkins tests to periodically run the IOR MPI parallel i/o benchmark at modest scale and validate filesystem functionality and performance for the scratch filesystem. 
 The test is scaled to provide representative performance numbers for a typical small application while not creating performance issues with other jobs or the larger filesystem. 
@@ -510,7 +510,7 @@ The initial display tabs in our Jenkins instance are used to group tests and we 
 \end{itemize}
 
 \section{Conclusion}
-\label{sec:conclusion}
+\label{sec:Conclusion}
 
 We typically run the latest Programming Environment (PE) on our TDS. Our production login nodes and the supercomputer have the latest PE installed as non default during initial testing and it can be loaded by modulefile selection. Our test login node is utilized for testing new software stacks and changes to the login environment that are independent of our production resources. Therefore Jenkins Projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments.   
 
