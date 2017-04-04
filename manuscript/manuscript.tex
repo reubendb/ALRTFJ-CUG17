@@ -34,82 +34,47 @@
 % for over three affiliations, or if they all won't fit within the width
 % of the page, use this alternative format:
 %
-\author{\IEEEauthorblockN{Timothy Bouvet, Reuben Budiardja, Galen Arnold}
-%xxxx\IEEEauthorrefmark{3} and
-%xxxx\IEEEauthorrefmark{4}}
-%\IEEEauthorblockA{\IEEEauthorrefmark{1}National Institute for Computational Science\\
+
+\author{
+%\IEEEauthorblockN{Christian Y. Cardall, Eirik Endeve, \& Anthony Mezzacappa}
+\IEEEauthorblockN{Timothy Bouvet, Galen Arnold}
+\IEEEauthorblockA{
 National Center for Supercomputing Applications\\
 University of Illinois at Urbana-Champaign, 61801\\
-National Institute for Computational Sciences\\
-The University of Tennessee, Knoxville, TN 37996\\
-\{tbouvet@illinois.edu,reubendb@utk.edu,gwarnold@illinois.edu\}}
-%\IEEEauthorblockA{\IEEEauthorrefmark{4}Electrical Engineering and Computer Science Department\\University of Tennessee, Knoxville, TN 37996\\xx@eecs.utk.edu}
-%}
+tbouvet@illinois.edu, gwarnold@illinois.edu
+}
 
+\and
 
-% use for special paper notices
-%\IEEEspecialpapernotice{(Invited Paper)}
-
-
+\IEEEauthorblockN{Reuben D. Budiardja}
+\IEEEauthorblockA{
+National Center for Computational Sciences\\
+Oak Ridge National Laboratory, Oak Ridge, TN 37831\\
+reubendb@ornl.gov}
+}
 
 % make the title area
 \maketitle
 \thispagestyle{plain}
 
 \begin{abstract}
-This paper explores the challenges of regression testing and monitoring of large scale systems such as NCSA's Blue Waters. 
-Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. 
-Jenkins was chosen for its versatility, large user base, and multitudes of plugins including plotting test results over time. 
-We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). 
-Not only does Jenkins have the ability to store historical data, but it can also send email or text messages based on results of a test. 
-Other requirements we had included two-factor authentication for accessing the Jenkins GUI with administrator privileges and account management through LDAP. 
-In this paper we describe our experience in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
+Monitoring and testing for regression of large scale systems such as the NCSA's Blue Waters supercompuer are challenging task. 
+In this paper we describe the solution we came up with to perform those tasks. 
+Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance.
+Jenkins, an automation server software, was chosen for its versatility, large user base, and multitudes of plugins including collecting data and plotting test results over time. 
+We describe our Jenkins deployment to launch and monitor jobs on remote HPC system, perform authentication with one-time password, and integrate with our LDAP server for its authorization. 
+We show some use cases and describe our best practices for successfully using Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
+
 \end{abstract}
 
 \begin{IEEEkeywords}
-Performance; Benchmarking; Computer architecture
+System-monitoring; Regression-testing; Application; Performance; Benchmarking
 \end{IEEEkeywords}
-
-%\begin{abstract}
-%LONG-This paper will explore the challenges of regression testing and monitoring of large scale systems such as NCSA’s Blue Waters. 
-%Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance. 
-%Another requirement was to find an automated solution for running a suite of test jobs that reveal the system health after upgrades and outages before returning the system to service. 
-%We evaluated test frameworks such as Inca [1] and Jenkins [2]. 
-%Jenkins was chosen for its versatility, large user base, and multitude of plugins including plotting test results over time. 
-%We utilize these plots to track trends and alert us to system-level issues before they are reported by our partners (users). 
-%Not only does Jenkins have the ability to store historical data but it can also send customized notifications (e.g. send email or text pages) based on the result of a test. 
-%Some of the requirements we had include two-factor authentication to access Jenkins GUI with privileges to execute tests and account management through LDAP. 
-%In this paper we describe our implementation of these requirements to ensure a secure and usable deployment of a Jenkins instance.
-
-%Our Jenkins instance was deployed on a vSphere managed VM running Centos 6.8. 
-%Security was of the highest concern since Jenkins has the ability to execute commands on our login nodes. 
-%Jenkins is set to log in as a standard user account with password-less access (commands to the login nodes can be input via Jenkins GUI) using ssh keys scoped to the VM. 
-%The VM (bwjenkins) was closely vetted by our security team on our test and development system (TDS) before it was allowed access to Blue Waters. 
-%Iptables was used to lock bwjenkins down to a small internal ip space to ensure the highest security. 
-%An anonymous user account was enabled with ‘read-only’ access to view current and historical test results. 
-%During a test, Jenkins downloads software, builds the software, submits a job, awaits completion, gathers and plots the results or returns error information during a failure. 
-%These are full end to end functionality tests of the programming environment, queueing system, license servers and they provide historical metrics to quickly detect regressions.
-
-%In this paper we describe in detail our challenges and experiences in deploying Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters. 
-%We will also show some application-based system-level tests we have implemented in Jenkins and share results of those tests. 
-%The deployment of Jenkins allows us to monitor and detect issues as early as possible from the perspective of a user on Blue Waters, eventually providing a more efficient service for better user experience.
-%\end{abstract}
-
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
-\IEEEpeerreviewmaketitle
 
 \section{Introduction}
 \label{sec:introduction}
 
-Monitoring large and complex high-performance computing systems has many challenges. 
+Monitoring large and complex high-performance computing systems have many challenges. 
 Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in user need and usage, and variable network traffic all interact to increase the system's complexity. 
 Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. 
 Therefore an application-level system monitoring framework is needed to give us a more complete picture of the system behavior. 
@@ -193,7 +158,7 @@ The benefit of this method is that one can basically treat the nodes as a local 
 For example, each node would have access to the parallel lustre filesystem mounted by the HPC system (even if Jenkins master itself does not, being only a small separate VM). 
 Each node can define its lustre filesystem as its build and test workspace. 
 Yet Jenkins automatically manages all communication with the nodes such that files (e.g. plot data, test output) generated on the lustre filesystem are readable from Jenkins without the explicit remote copy (i.e. via SCP). 
-Another example is that one can have Jenkins checkout or clone code from remote a repository (e.g. using Subversion or Git) and the copy will be automatically available on the lustre filesystem defined as the workspace of that node. 
+Another example is that one can have Jenkins checkout or clone code from a remote repository (e.g. using Subversion or Git) and the copy will be automatically available on the lustre filesystem defined as the workspace of that node. 
 These integration benefits make building Jenkins projects more seamless.
 
 \subsubsection{Using SSH Plugins for Test Systems}
@@ -258,7 +223,7 @@ RequestHeader set X-Forwarded-Port "443"
 With this setup, all requests to the HTTP over SSL protocol (i.e. \texttt{https}) on port 443 by default) are forwarded to the Jenkins server and Jenkins responses are forwarded back to the client (i.e. web browser).
 
 Optionally, one may allow non-authenticated, ''read-only`` access to the Jenkins dashboard over regular (non-secure) HTTP connections. 
-Jenkins' own authorization mechanism can be used to control this access, but we can also add Apache HTTP directives for further security, limiting \texttt{GET} requests. 
+Jenkins' own authorization mechanism can be used to control this access, but we can also add Apache HTTP directives for further security, limiting to \texttt{GET} requests only. 
 To achieve this, we created the file \texttt{/etc/httpd/conf.d/vhosts.conf} with the following content:
 \begin{lstlisting}
  
@@ -300,7 +265,7 @@ NameVirtualHost *:80
 \subsection{Authenticating with One-Time Password}
 
 Although Jenkins supplies its own authentication mechanism with its built-in user and password database, we feel that it is inadequate for securing our instance. 
-The default Jenkins authentication setup is also unfortunate, in which it allows anyone to self-register creating their own username and password \footnote{This is perhaps another artifact of Jenkins setup intended to intranet environment.} 
+The default Jenkins authentication setup is also unfortunate, in which it allows anyone to self-register creating their own username and password\footnote{This is perhaps another artifact of Jenkins setup intended for intranet environment}. 
 We wanted instead to use our One-Time Password (OTP) infrastructure with RSA SecurID (FIXME: Add references https://www.rsa.com/en-us/products/rsa-securid-suite, https://en.wikipedia.org/wiki/RSA_SecurID) token for authentication. 
 In this section we describe how we accomplished that.
 
@@ -339,6 +304,7 @@ Most of the configuration is defined in the file \texttt{/etc/httpd/conf.d/ssl.c
 #-- OTP for Jenkins SSL connection
 DefineExternalAuth pwauth+session pipe 
   /usr/local/bin/BasicAuthOTPSession.py
+>>>>>>> 5fc63821c62c4742a51b13b8301b3250eb23129c
 
 <LocationMatch / > 
   AuthType Basic
@@ -396,21 +362,18 @@ At NICS, this access is only allowed from the institution IP block only.
 
 \section{Anatomy of A Test Application}
 \label{sec:TestAnatomy}
-An application test is a Jenkins project. In this section we describe what a project typically consist of. 
+New software projects are required to be tested on our test and development system (TDS) and approved before deployment on Blue Waters and this is one of our key best practices. 
+ Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. 
+ Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
+\subsection{test description}
+We require a description for each test to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
+\subsection{limits log files}
+The Jenkins test VM filled to capacity after the first few weeks of intensive use and an influx of several new tests that output long source code build detail. 
+ We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
 
-% New software projects are required to be tested on our TDS and approved before deployment on Blue Waters and this is one of our key best practices. 
-%  Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. 
-%  Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
+\subsection{ssh to a login host}
+There are several target ssh hosts which may be selected from our instance: the TDS (JYC), the main system, and the new software deployment login node within the main system. 
 
-\subsection{Description}
-We require a description for each project to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
-
-\subsection{Limiting Retained Build Log}
-The Jenkins VM filled to capacity after the first few weeks of intensive use and an influx of several new projects that output long source code build detail. 
-We retroactively modified all projects to limit the number of old build logs retained (maximum 50 for most projects). 
-
-\subsection{SSH to a Login Host}
-There are several target ssh hosts which may be selected from our instance: the test rack JYC, the main system, and the new software deployment login node within the main system. 
  None of our tests run locally within the Jenkins VM.
 \subsection{run shell commands}
 A test is composed of shell command and where possible we try to be as transparent with our test construction as possible. 
@@ -529,7 +492,7 @@ Our Jenkins instance is a source of information for a filesystem dashboard displ
 \end{figure}
 
 \subsection{special projects}
-The initial display tabs in our Jenkins instance are used to group tests and we add tabs for special projects.   For example we clone existing tests for evaluating a new software stack on our test login node.   Our test rack has a separate set of tests from our production system and is used as our Jenkins development mule.  The sustained petascale performance benchmarks are in their own tab because they run at scale and are only run on-demand by staff (not scheduled by Jenkins ).
+The initial display tabs in our Jenkins instance are used to group tests and we add tabs for special projects.   For example we clone existing tests for evaluating a new software stack on our test login node (h2ologin4).   Our TDS (JYC) has a separate set of tests from our production system and is used as our Jenkins development mule.  The sustained petascale performance benchmarks (SPP) are in their own tab because they run at scale and are only run on-demand by staff (not scheduled by Jenkins ).
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{tabs-display}
@@ -549,7 +512,7 @@ The initial display tabs in our Jenkins instance are used to group tests and we 
 \section{Conclusion}
 \label{sec:conclusion}
 
-We typically run the latest Programming Environment (PE) on our TDS. Our production login nodes and the supercomputer have the latest PE installed as non default during initial testing and it can be loaded by modulefile selection. Our test login node (Bright Cluster Provisioned EsLogin) is utilized for testing new software stacks and changes to the login environment that are independent of our production resources. Therefore Jenkins Projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments.   
+We typically run the latest Programming Environment (PE) on our TDS. Our production login nodes and the supercomputer have the latest PE installed as non default during initial testing and it can be loaded by modulefile selection. Our test login node is utilized for testing new software stacks and changes to the login environment that are independent of our production resources. Therefore Jenkins Projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments.   
 
 \subsection{reproducibility and regression testing}
 Jenkins provides the framework we need to maintain tests in a consistent fashion and track the results over time (logs and plots ).  Tests typically are not changed so that we get apples-apples comparisons.  When a new test is needed for a particular activity, we attempt to derive it from an existing test to maintain consistency and simplify test creation.  Reusable test components (watchdog scripts, plotting metrics) are employed to make construction of completely new tests straightforward.
