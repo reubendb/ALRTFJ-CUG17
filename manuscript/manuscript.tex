@@ -394,24 +394,28 @@ At NICS, this access is only allowed from the institution IP block only.
 %-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
 %-p tcp --dport 443 -j ACCEPT
 
-\section{Anatomy of A Test}
+\section{Anatomy of A Test Application}
 \label{sec:TestAnatomy}
-New software projects are required to be tested on our TDS and approved before deployment on Blue Waters and this is one of our key best practices. 
- Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. 
- Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
-\subsection{test description}
-We require a description for each test to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
-\subsection{limits log files}
-The Jenkins test VM filled to capacity after the first few weeks of intensive use and an influx of several new tests that output long source code build detail. 
- We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
+An application test is a Jenkins project. In this section we describe what a project typically consist of. 
 
-\subsection{ssh to a login host}
+% New software projects are required to be tested on our TDS and approved before deployment on Blue Waters and this is one of our key best practices. 
+%  Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. 
+%  Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
+
+\subsection{Description}
+We require a description for each project to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
+
+\subsection{Limiting Retained Build Log}
+The Jenkins VM filled to capacity after the first few weeks of intensive use and an influx of several new projects that output long source code build detail. 
+We retroactively modified all projects to limit the number of old build logs retained (maximum 50 for most projects). 
+
+\subsection{SSH to a Login Host}
 There are several target ssh hosts which may be selected from our instance: the test rack JYC, the main system, and the new software deployment login node within the main system. 
  None of our tests run locally within the Jenkins VM.
 \subsection{run shell commands}
 A test is composed of shell command and where possible we try to be as transparent with our test construction as possible. 
- We prefer commands in the Jenkins configuration over running a script in the filesystem on the remote ssh target. 
- Scripts that are remote run with verbose mode or are displayed via "cat -n" to save output to the Jenkins console log and make for simpler debugging when a test fails.
+We prefer commands in the Jenkins configuration over running a script in the filesystem on the remote ssh target. 
+Scripts that are remote run with verbose mode or are displayed via "cat -n" to save output to the Jenkins console log and make for simpler debugging when a test fails.
 \subsubsection{test completes on login node}
 Some tests run only on the ssh login node and return more or less immediately. 
  Examples include tests for batch system functionality, ssh functionality, and filesystem functionality. 
