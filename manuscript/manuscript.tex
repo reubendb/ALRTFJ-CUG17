@@ -59,10 +59,10 @@ reubendb@ornl.gov}
 \thispagestyle{plain}
 
 \begin{abstract}
-Monitoring and testing for regression of large scale systems such as the NCSA's Blue Waters supercompuer are challenging task. 
+Monitoring and testing for regression of large scale systems such as the NCSA's Blue Waters supercomputer are challenging tasks. 
 In this paper we describe the solution we came up with to perform those tasks. 
 Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance.
-Jenkins, an automation server software, was chosen for its versatility, large user base, and multitudes of plugins including collecting data and plotting test results over time. 
+Jenkins, an automation server software, was chosen for its versatility, large user base, and multitude of plugins including collecting data and plotting test results over time. 
 We describe our Jenkins deployment to launch and monitor jobs on remote HPC system, perform authentication with one-time password, and integrate with our LDAP server for its authorization. 
 We show some use cases and describe our best practices for successfully using Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
 
@@ -75,13 +75,13 @@ System-monitoring; Regression-testing; Application; Performance; Benchmarking
 \section{Introduction}
 \label{sec:introduction}
 
-Monitoring large and complex high-performance computing systems have many challenges. 
-Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in user need and usage, and variable network traffic all interact to increase the system's complexity. 
+Monitoring large and complex high-performance computing systems has many challenges. 
+Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in user needs and usage, and variable network traffic all interact to increase the system's complexity. 
 Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. 
 Therefore an application-level system monitoring framework is needed to give us a more complete picture of the system behavior. 
  
 
-Over time, either due to configuration and software changes or hardware aging, performance of such complex system may regress. 
+Over time, either due to configuration and software changes or hardware aging, performance of such a complex system may regress. 
 To identify and correct such regression, one must have some method to do regression testing of the system performance. 
 This requires a systematic record of the system performance over time.
 
@@ -94,9 +94,9 @@ Although it is typically used as a continuous integration tool in the software d
 These tasks may include building applications, executing them, deploying software, and running various custom-written tests and scripts. 
 We chose Jenkins as the tool for our regression testing framework because of its active development, wide community support, and the readily available ``plugins'' to perform various specific tasks.
 
-In this paper we describe in detail our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Water supercomputer at the National Center for Supercomputing Applications (NCSA), Darter and Beacon at the National Institute for Computational Sciences (NICS). 
+In this paper we describe in detail our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Water supercomputer at the National Center for Supercomputing Applications (NCSA), Darter, and Beacon at the National Institute for Computational Sciences (NICS). 
 These systems are Cray XE, XK, XC, and CS series. 
-The outline of this paper is as follows. In section \ref{sec:JenkinsConfiguration} we describe in details how we configure Jenkins for our deployment. This is followed by a brief description what an application test consist of in section \ref{sec:TestAnatomy}. Section \ref{sec:UseCases} shows some use cases and results from applications we have used to monitor our systems. We end the paper with concluding remarks in section \ref{sec:Conclusion}.
+The outline of this paper is as follows. In section \ref{sec:JenkinsConfiguration} we describe in detail how we configure Jenkins for our deployment. This is followed by a brief description what an application test consist of in section \ref{sec:TestAnatomy}. Section \ref{sec:UseCases} shows some use cases and results from applications we have used to monitor our systems. We end the paper with concluding remarks in section \ref{sec:Conclusion}.
 
 
 \section{Jenkins Configuration}
@@ -131,7 +131,7 @@ At NICS our setup uses the former, while at NCSA our setup uses the latter.
 In the following we briefly discuss the setup of these two mechanisms.
 
 \subsubsection{Using Nodes for Test Systems}
-The original idea behind adding nodes is to allow Jenkins to scale with the workload it has to do. 
+The original idea behind adding nodes is to allow Jenkins to scale with its workload. 
 As projects are added, one can add nodes (i.e. more build machines) allowing Jenkins to build more projects concurrently. 
 Jenkin's projects may also be explicitly 'labeled' to execute on a certain node. 
 We capitalized both of these features to enable the aforementioned remote execution.
@@ -147,7 +147,7 @@ We would create a Jenkins project called ''NAMD-Beacon`` and label it to run onl
 We would also create another project called ''NAMD-Darter`` and label it appropriately. 
 The two projects have slightly different build scripts (and possibly different test cases) so that they build correctly on the systems where they were meant to run.
 
-Jenkins nodes need to have a Java-based daemon (Jenkins' ''slave.jar``) to run which connects back to the master via a certain port (which is configurable). 
+Jenkins nodes need to have a Java-based daemon (Jenkins' ''slave.jar``) running which connects back to the master via a certain port (which is configurable). 
 This can be considered a drawback. 
 If the daemon somehow dies, it needs to be restarted. 
 The daemon runs as regular user, the user which essentially runs the build and submits the jobs on the HPC system. 
@@ -266,7 +266,7 @@ NameVirtualHost *:80
 \subsection{Authenticating with One-Time Password}
 
 Although Jenkins supplies its own authentication mechanism with its built-in user and password database, we feel that it is inadequate for securing our instance. 
-The default Jenkins authentication setup is also unfortunate, in which it allows anyone to self-register creating their own username and password\footnote{This is perhaps another artifact of Jenkins setup intended for intranet environment}. 
+The default Jenkins authentication setup is unfortunate, in that it allows anyone to self-register creating their own username and password\footnote{This is perhaps another artifact of the Jenkins setup intended for intranet environment}. 
 We wanted instead to use our One-Time Password (OTP) infrastructure with RSA SecurID \cite{RSASecurID} token for authentication. 
 In this section we describe how we accomplished that.
 
@@ -294,8 +294,8 @@ To accomplish this, we wrote a small python script for managing session with OTP
 When this script is initially called, it uses a pre-defined back-end authenticator for authentication. 
 Once an authentication succeed, a session is created and the next request with the same credentials from the same IP address are deemed successful without going through the real authenticator. 
 The session expires in a predefined amount of time. 
-A new request within that time renew the session. 
-If there is no more request within that time, the session expires.
+A new request within that time renews the session. 
+If there are no more requests within that time, the session expires.
 When this happens, one has to authenticate again with the back-end authenticator. 
 
 %Figure {FIXME: CREATE FIGURE) illustrates the authentication mechanism we describe. 
@@ -345,7 +345,7 @@ Figure \ref{fig:LDAP-Jenkins} shows the screenshot of our LDAP configuration wit
 \label{fig:LDAP-Jenkins}
 \end{figure}
 
-Since Jenkins allows one to enter arbitrarily command to be executed on login nodes, we want to further mitigate security risk via firewall rules. 
+Since Jenkins allows one to enter arbitrary commands to be executed on login nodes, we want to further mitigate security risk via firewall rules. 
 In our installation, we only allow IP address originating from our institution block to access the secure HTTP portion and authenticate to access Jenkins. 
 At NCSA, the non secure, read-only, HTTP portion is accessible from anywhere. 
 At NICS, this access is only allowed from the institution IP block only. 
@@ -362,7 +362,7 @@ At NICS, this access is only allowed from the institution IP block only.
 
 \section{Anatomy of A Test Application}
 \label{sec:TestAnatomy}
-New software projects are required to be tested on our test and development system (TDS) and approved before deployment on Blue Waters and this is one of our key best practices. 
+New software projects must be tested on our test and development system (TDS) and approved before deployment on Blue Waters and this is one of our key best practices. 
  Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. 
  Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
 \subsection{test description}
@@ -506,7 +506,7 @@ The initial display tabs in our Jenkins instance are used to group tests and we 
 In this paper we have described our deployment of Jenkins automation server for user-level, application-based system monitoring and regression testing on large installation of HPC systems at NCSA and NICS. 
 This monitoring system has proved to be useful in early detection of system issues. 
 
-Another usefulness of this system is to anticipate issues related to software update. 
+Another value of this system is to anticipate issues related to software updates. 
 We typically run the latest Programming Environment (PE) on our Test and Development System (TDS), while our production systems have the latest PE installed as non default. 
 During initial testing this newer PE can be loaded by modulefile selection. This setup allow us to use both the TDS and login node for testing the new software stacks and changes to the login environment without affecting the production environment. 
 Jenkins projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments with the new PE.
@@ -520,7 +520,7 @@ In developing Jenkins projects for testing, we adhere to the following best prac
 \item Tests are coded to be more verbose than necessary so that failures can be isolated quickly and easily.
 \end{itemize}
 
-In summary, our Jenkins-based system monitoring has allowed us to do: 
+In summary, our Jenkins-based system monitoring has enabled: 
 
 \begin{itemize}
  
@@ -534,7 +534,7 @@ The notification feature keeps test owners engaged in the testing activity of Je
 
 \end{itemize}
 
-In working with Jenkins test, we have found that it is useful to be aware of the following caveats: 
+In working with Jenkins tests, we have found that it is useful to be aware of the following caveats: 
 
 \begin{itemize}
 
