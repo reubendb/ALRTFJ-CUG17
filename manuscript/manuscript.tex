@@ -500,29 +500,51 @@ The initial display tabs in our Jenkins instance are used to group tests and we 
 \label{fig:tabs-display}
 \end{figure}
 
-\section{Best Practices}
+\section{Conclusion}
+\label{sec:Conclusion}
+
+In this paper we have described our deployment of Jenkins automation server for user-level, application-based system monitoring and regression testing on large installation of HPC systems at NCSA and NICS. 
+This monitoring system has proved to be useful in early detection of system issues. 
+
+Another usefulness of this system is to anticipate issues related to software update. 
+We typically run the latest Programming Environment (PE) on our Test and Development System (TDS), while our production systems have the latest PE installed as non default. 
+During initial testing this newer PE can be loaded by modulefile selection. This setup allow us to use both the TDS and login node for testing the new software stacks and changes to the login environment without affecting the production environment. 
+Jenkins projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments with the new PE.
+
+In developing Jenkins projects for testing, we adhere to the following best practices: 
 \begin{itemize}
-\item Tests are developed on the JYC development rack and not assigned into a Jenkins tab until reviewed. 
+\item Tests are developed on the TDS and not assigned into a Jenkins tab until reviewed. 
 \item Email notification is enabled for most tests and the field is always populated with a test owner.
 \item All tests contain a description that describes what is tested, resources required, scheduling frequency, and overall summary  to be readable by the management team.
 \item Log file count is limited in the test configuration to keep from filling filesystem space with verbose logs.
 \item Tests are coded to be more verbose than necessary so that failures can be isolated quickly and easily.
 \end{itemize}
 
-\section{Conclusion}
-\label{sec:Conclusion}
+In summary, our Jenkins-based system monitoring has allowed us to do: 
 
-We typically run the latest Programming Environment (PE) on our TDS. Our production login nodes and the supercomputer have the latest PE installed as non default during initial testing and it can be loaded by modulefile selection. Our test login node is utilized for testing new software stacks and changes to the login environment that are independent of our production resources. Therefore Jenkins Projects tailored for each environment allow for regression testing of the current production as well as pre-production user-level environments.   
+\begin{itemize}
+ 
+\item \textbf{Reproducibility and Regression Testing}: Jenkins provides the framework we need to maintain tests in a consistent fashion and track the results over time (logs and plots). 
+Tests typically are not changed so that we get apples-apples comparisons.
+When a new test is needed for a particular activity, we attempt to derive it from an existing test to maintain consistency and simplify test creation.
+Reusable test components (watchdog scripts, plotting metrics) are employed to make construction of completely new tests straightforward.
 
-\subsection{reproducibility and regression testing}
-Jenkins provides the framework we need to maintain tests in a consistent fashion and track the results over time (logs and plots ).  Tests typically are not changed so that we get apples-apples comparisons.  When a new test is needed for a particular activity, we attempt to derive it from an existing test to maintain consistency and simplify test creation.  Reusable test components (watchdog scripts, plotting metrics) are employed to make construction of completely new tests straightforward.
-\subsection{rapid reaction}
+\item \textbf{Rapid Reaction}:
 The notification feature keeps test owners engaged in the testing activity of Jenkins and they are often our first responders to system issues.  This results in a shorter reaction time when the system is not performing to expectations--staff are notified automatically when the user experience is impacted.
-\subsection{caveats}
-\subsubsection{transient errors}
-Transient errors with Jenkins sometimes occur--particularly with the Jenkins ssh subsystem.  It's not unusual to get ssh failure rates of 1/100 which are completely transient (immediately running the test again manually clears the issue on the dashboard).
-\subsubsection{test scale and frequency}
-There is some subjectivity in the frequency and scale (resource utilization) of tests.  Testing too often, too large, or some combination of the two may perturb the system such that other tests are impacted or create bottlenecks in the system for the real user community.  This is the primary reason we require peer review for new tests.
+
+\end{itemize}
+
+In working with Jenkins test, we have found that it is useful to be aware of the following caveats: 
+
+\begin{itemize}
+
+\item \textbf{Transient Errors}: Transient errors with Jenkins sometimes occur--particularly with the Jenkins ssh subsystem. 
+It's not unusual to get ssh failure rates of 1/100 which are completely transient (immediately running the test again manually clears the issue on the dashboard).
+
+\item \textbf{Test Scale and Frequency}: There is some subjectivity in the frequency and scale (resource utilization) of tests.
+Testing too often, too large, or some combination of the two may perturb the system such that other tests are impacted or create bottlenecks in the system for the real user community.
+This is the primary reason we require peer review for new tests.
+\end{itemize}
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
