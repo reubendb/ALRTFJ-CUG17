@@ -196,7 +196,7 @@ Although the Jenkins web server may be sufficient for a setup in which Jenkins i
 
 We decided to use an Apache HTTP Server as the front-end web server facing the world. 
 To achieve that, first we set the Jenkins web server to only listen to the \texttt{localhost} interface on port 8080, by setting the following variable in Jenkins configuration file \texttt{/etc/sysconfig/jenkins}:
-\begin{lstlisting}
+\begin{lstlisting}[captionpos=t,language=bash,label=lst:jenkinsConfig]
 #-- Restrict to only listen to localhost
 JENKINS_PORT="8080"
 JENKINS_LISTEN_ADDRESS=127.0.0.1
@@ -206,7 +206,7 @@ Second, we need to forward all HTTP requests to Jenkins, and also forward Jenkin
 This is accomplished using the module \texttt{mod_proxy} \cite{ApacheModProxy} in Apache HTTP which allows it to act as a proxy / gateway. 
 To enable this feature, the following stanza is added to the configuration file \texttt{/etc/httpd/conf.d/ssl.conf} inside the \texttt{<VirtualHost>} directive:
 
-\begin{lstlisting}
+\begin{lstlisting}[frame=b,captionpos=b,label=lst:reverseProxy,caption=Relevant configuration lines for setting up reverse proxy in Apache HTTP Server]
 ProxyRequests       Off
 ProxyPreserveHost   On 
 AllowEncodedSlashes On 
@@ -298,8 +298,8 @@ A new request within that time renew the session.
 If there is no more request within that time, the session expires.
 When this happens, one has to authenticate again with the back-end authenticator. 
 
-Figure {FIXME: CREATE FIGURE) illustrates the authentication mechanism we describe. 
-Most of the configuration is defined in the file \texttt{/etc/httpd/conf.d/ssl.conf}, immediately following listing [FIXME: CITE LISTING] inside the same \texttt{<VirtualHost>} directive:
+%Figure {FIXME: CREATE FIGURE) illustrates the authentication mechanism we describe. 
+Most of the configuration is defined in the file \texttt{/etc/httpd/conf.d/ssl.conf}, immediately following the stanza reproduced in listing \ref{lst:reverseProxy} inside the same \texttt{<VirtualHost>} directive:
 
 \begin{lstlisting}
 #-- OTP for Jenkins SSL connection
