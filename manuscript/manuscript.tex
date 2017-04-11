@@ -362,16 +362,13 @@ At NICS, this access is only allowed from the institution IP block only.
 
 \section{Anatomy of A Test Application}
 \label{sec:TestAnatomy}
-New software projects are required to be tested on our test and development system (TDS) and approved before deployment on Blue Waters and this is one of our key best practices. 
- Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. 
- Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
-\subsection{test description}
-We require a description for each test to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
-\subsection{limits log files}
-The Jenkins test VM filled to capacity after the first few weeks of intensive use and an influx of several new tests that output long source code build detail. 
- We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
+New Jenkins projects (i.e. application tests) are required to be tested on our test and development system (TDS) and approved before deployment on Blue Waters. This is one of our key best practices. Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. Tests that are still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
+\subsection{Test Description}
+We require a description for each project to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
+\subsection{Limits Log Files}
+The Jenkins test VM filled to capacity after the first few weeks of intensive use and an influx of several new tests that output long source code build detail. We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
 
-\subsection{ssh to a login host}
+\subsection{SSH to a Login Host}
 There are several target ssh hosts which may be selected from our instance: the TDS (JYC), the main system, and the new software deployment login node within the main system. 
 
  None of our tests run locally within the Jenkins VM.
@@ -534,7 +531,7 @@ The notification feature keeps test owners engaged in the testing activity of Je
 
 \end{itemize}
 
-In working with Jenkins test, we have found that it is useful to be aware of the following caveats: 
+In working with Jenkins projects, we have found that it is useful to be aware of the following caveats: 
 
 \begin{itemize}
 
