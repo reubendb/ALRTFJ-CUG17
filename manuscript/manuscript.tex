@@ -1,6 +1,7 @@
 
 
-\documentclass[10pt, conference, compsocconf]{IEEEtran}
+%\documentclass[10pt, conference, compsocconf]{IEEEtran}
+\documentclass{sig-alternate-05-2015}
 
 \usepackage{graphicx}
 \usepackage{algorithmic,listings}
@@ -57,6 +58,8 @@
 % make the title area
 \maketitle
 \thispagestyle{plain}
+
+\setcopyright{licensedusgovmixed}
 
 \begin{abstract}
 Monitoring and testing for regression of large scale systems such as the NCSA's Blue Waters supercomputer are challenging tasks. 
@@ -535,7 +538,7 @@ Our Jenkins instance is a source of information for a filesystem dashboard displ
 \end{figure}
 
 \subsection{Special Projects}
-The initial display tabs (i.e. Jenkins ''Views``) in our Jenkins instance are used to group tests that are run periodically in production. We add separate ''Views`` for special projects. For example we clone existing tests for evaluating a new software stack on our test login node (''h2ologin4`` view).  Our TDS (JYC) has a separate set of tests from our production system and is used as our Jenkins development mule. The sustained petascale performance benchmarks (SPP) are in their own tab because they run at scale and are only run on-demand by staff (i.e. not scheduled to run periodically by Jenkins}. Figure \ref{fig:tabs-display} illustrates our use of Jenkins views to organize our application tests.
+The initial display tabs (i.e. Jenkins ''Views``) in our Jenkins instance are used to group tests that are run periodically in production. We add separate ''Views`` for special projects. For example we clone existing tests for evaluating a new software stack on our test login node (''h2ologin4`` view).  Our TDS (JYC) has a separate set of tests from our production system and is used as our Jenkins development mule. The sustained petascale performance benchmarks (SPP) are in their own tab because they run at scale and are only run on-demand by staff (i.e. not scheduled to run periodically by Jenkins). Figure \ref{fig:tabs-display} illustrates our use of Jenkins views to organize our application tests.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{tabs-display}
@@ -588,6 +591,8 @@ It's not unusual to get ssh failure rates of 1/100 which are completely transien
 Testing too often, too large, or some combination of the two may perturb the system such that other tests are impacted or create bottlenecks in the system for the real user community.
 This is the primary reason we require peer review for new tests.
 \end{itemize}
+
+Due to our initial successful deployment of Jenkins as regression testing framework on NCSA and NICS resources,  it is currently being deployed on other resources including the CADES (Compute and Data Environment for Science) resources at the Oak Ridge National Laboratory. 
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
