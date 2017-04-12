@@ -441,19 +441,19 @@ As a best practice we also use the email notification as a method of tracking au
 
 \section{Use Cases}
 \label{sec:UseCases}
-\subsection{IOR Lustre scratch test}
-We created Jenkins tests to periodically run the IOR MPI parallel i/o benchmark at modest scale and validate filesystem functionality and performance for the scratch filesystem. 
-The test is scaled to provide representative performance numbers for a typical small application while not creating performance issues with other jobs or the larger filesystem. 
- One of our best practices is to provide a management level summary description for casual jenkins users who want to view the tests but do not need to understand the full Jenkins configuration and execution details. 
+\subsection{IOR for Lustre Scratch Test}
+We created Jenkins tests to periodically run the IOR MPI parallel I/O benchmark at modest scale and validate filesystem functionality and performance for the scratch filesystem. 
+The test is scaled to provide representative performance numbers for a typical small application while not creating performance issues with other jobs or the larger filesystem.
+One of our best practices is to provide a management level summary description for casual Jenkins users who want to view the tests but do not need to understand the full Jenkins configuration and execution details. 
  
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{IOR-bluewaters-descr}
-\caption{ IOR description in jenkins }
+\caption{IOR description in Jenkins.}
 \label{fig:IOR-bluewaters-descr}
 \end{figure}
-Where possible, tests build from source and exercise multiple user-facing system components such as: git for external connectivity and modules to test defaults in the environment. 
- Where scripts on the remote SSH site are used, they are echoed and/or displayed with "cat -n" to make console output verbose and easy to debug in case of errors. 
+Where possible, tests build from source and exercise multiple user-facing system components such as: Git for external connectivity and modules to test defaults in the environment. 
+Where scripts on the remote SSH site are used, they are echoed and/or displayed with \texttt{cat -n} to make console output verbose and easy to debug in case of errors. 
  
 \begin{figure}[H]
 \centering
@@ -461,7 +461,11 @@ Where possible, tests build from source and exercise multiple user-facing system
 \caption{ IOR configuration sample }
 \label{fig:IOR-configuration-sample}
 \end{figure}
-The IOR test is set to run as scheduled by Jenkins with a best-effort through our batch system.  The test synchronously blocks such that the next test will not start until the previous one has completed.  We employ a watchdog script to monitor the batch queue and keep the test active until the system marks it as finished.  This has the side effect of making the minimum test time an integer multiple of the sleep time in the watchdog script.  This may be adjusted to fit individual site needs.
+The IOR test is set to run as scheduled by Jenkins with a best-effort through our batch system.
+The test synchronously blocks such that the next test will not start until the previous one has completed.
+We employ a watchdog script (see Listing \ref{lst:watchdog}) to monitor the batch queue and keep the test active until the system marks it as finished.
+This has the side effect of making the minimum test time an integer multiple of the sleep time in the watchdog script.
+This may be adjusted to fit individual site needs.
 \begin{lstlisting}[frame=tb,captionpos=t,language=bash,caption={pbs/torque watchdog script}, label=lst:watchdog]
 #!/bin/bash
 echo "=== RUNNING $0 ==="
@@ -488,10 +492,10 @@ done
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{IOR-watchdog-out}
-\caption{ IOR watchdog console output }
+\caption{ IOR watchdog console output.}
 \label{fig:IOR-watchdog-out}
 \end{figure}
-For tests that produce an interesting performance metric like IOR, we save that output to the file format expected by Jenkins and use plotting feature to produce plots. 
+For tests that produce an interesting performance metric like IOR, we save that output to the file format expected by Jenkins (see Listing \ref{lst:yvalue}) and use plotting feature to produce plots (Figure \ref{fig:IOR-plot}). 
 \begin{lstlisting}[frame=tb,captionpos=t,language=bash,caption={sample YVALUE output file}, label=lst:yvalue]
 bwjenkins$ cat myiorREADnumber.dat 
 YVALUE=8352.71
@@ -499,21 +503,21 @@ YVALUE=8352.71
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{IOR-plot}
-\caption{ IOR plot view }
+\caption{IOR Plot View.}
 \label{fig:IOR-plot}
 \end{figure}
 A plot like this helps us with performance baselines and we can quickly react to changes in the software environment or filesystem configuration that adversely impact performance.
 
-\subsection{mdtest Lustre tests}
-The mdtest metadata test is run on the home and scratch filesystems to validate metadata server performance.  The IOR and mdtest user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric.  
+\subsection{mdtest Lustre Tests}
+The mdtest metadata test is run on the home and scratch filesystems to validate metadata server performance.  The IOR and mdtest user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric. Figure \ref{fig:mdtest-plot} plots the results of this test over certain period of time. 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{mdtest-plot}
-\caption{ mdtest plot view }
+\caption{mdtest plot view }
 \label{fig:mdtest-plot}
 \end{figure}
 
-An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties.  Setting notifications for unstable builds will trigger an E-mail every time the test state changes (from successful to failing and once again when successful ).
+An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties. Setting notifications for unstable builds will trigger an e-mail every time the test state changes (from successful to failing and once again when successful ). Figure \ref{fig:mdtest-config-email} shows screenshot of the email notification configuration for the mdtest test in Jenkins.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{mdtest-config-email}
@@ -521,8 +525,8 @@ An additional best practice is to enable E-mail Notifications to the test author
 \label{fig:mdtest-config-email}
 \end{figure}
 
-\subsection{filesystem dashboard}
-Our Jenkins instance is a source of information for a filesystem dashboard display we maintain in our wiki.  The "http://" urls for the plot images are shown on the dashboard and provide a recent-time display of filesystem metrics from a user point of view.  We add a Jenkins test to track response time of /bin/ls on the login nodes--a reasonable metric of metadata server health and also the most common problem reported by users when we are having filesystem issues.
+\subsection{Filesystem Dashboard}
+Our Jenkins instance is a source of information for a filesystem dashboard display we maintain in our wiki (Figure \ref{fig:wiki-dashboard}. The \texttt{http://} URLs for the plot images can be referred directly and are shown on the dashboard to provide a recent-time display of filesystem metrics from a user point of view. We add a Jenkins test to track response time of \texttt{/bin/ls} on the login nodes---a reasonable metric of metadata server health and also the most common problem reported by users when we are having filesystem issues.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{wiki-dashboard}
@@ -530,12 +534,12 @@ Our Jenkins instance is a source of information for a filesystem dashboard displ
 \label{fig:wiki-dashboard}
 \end{figure}
 
-\subsection{special projects}
-The initial display tabs in our Jenkins instance are used to group tests and we add tabs for special projects.   For example we clone existing tests for evaluating a new software stack on our test login node (h2ologin4).   Our TDS (JYC) has a separate set of tests from our production system and is used as our Jenkins development mule.  The sustained petascale performance benchmarks (SPP) are in their own tab because they run at scale and are only run on-demand by staff (not scheduled by Jenkins ).
+\subsection{Special Projects}
+The initial display tabs (i.e. Jenkins ''Views``) in our Jenkins instance are used to group tests that are run periodically in production. We add separate ''Views`` for special projects. For example we clone existing tests for evaluating a new software stack on our test login node (''h2ologin4`` view).  Our TDS (JYC) has a separate set of tests from our production system and is used as our Jenkins development mule. The sustained petascale performance benchmarks (SPP) are in their own tab because they run at scale and are only run on-demand by staff (i.e. not scheduled to run periodically by Jenkins}. Figure \ref{fig:tabs-display} illustrates our use of Jenkins views to organize our application tests.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{tabs-display}
-\caption{ tabs for project areas }
+\caption{Jenkins views (tabs) in our instance.}
 \label{fig:tabs-display}
 \end{figure}
 
