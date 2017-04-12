@@ -405,7 +405,7 @@ There are basically two kinds of tests:
 \subsubsection{Test Completes on the Login Node}
 Some tests run only on the login node and return more or less immediately. Examples include tests for batch system functionality, login / SSH functionality, and filesystem functionality. These tests are very similar in style to unit tests which target a limited set of functionality.
 
-\subsubsection{test is submitted to batch system}
+\subsubsection{Test Submitted to Batch System}
 More comprehensive tests typically build and run an application or benchmark through the batch system.  These tests exercise multiple aspects of the system: (filesystem, compilers and modules, high-speed network, external connectivity to the internet, etc.). These tests are written such that they block to completion so that we do not overburden the batch system with tests. Unlike tests that run entirely on a login node, completion time can be highly variable depending on the queue depth and available backfill windows for the batch system.
  
 
