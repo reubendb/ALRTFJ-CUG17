@@ -552,6 +552,26 @@ The initial display tabs (i.e. Jenkins ''Views``) in our Jenkins instance are us
 \label{fig:tabs-display}
 \end{figure}
 
+\subsection{NAMD Test}
+NAMD is one of many applications provided system-wide at NICS due to its high use. It is managed via SWTools2 \cite{SWTools2} such that build and test recipes are standardized. For the purpose of regression testing, we have written several glue scripts in SWTools to make it work seamlessly in Jenkins. Figure \ref{fig:NAMD-jenkins} shows screenshot of shell commands in Jenkins interface to build and test this application. The commands hide many of the complexities of building and executing the application behind SWTools recipes for NAMD. However, they are exactly the same commands used to build and test this application for provisioning to users \footnote{SWTools recipes for this case can be gleaned at  https://github.com/reubendb/SWTools-NICS-CI}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{NAMD-Jenkins}
+\caption{Build commands for NAMD in Jenkins with SWTools2 integration.}
+\label{fig:NAMD-jenkins}
+\end{figure}
+
+For this application testing, we use a well known NAMD benchmark case ''ApoA1''. We collect performance data such as CPU time and memory usage and plot them over time (see Figure \ref{fig:NAMDPlot} for screenshot of the plots as seen in Jenkins interface). 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{NAMDPlot}
+\caption{Plots of NAMD test results in Jenkins.}
+\label{fig:NAMDPlot}
+\end{figure}
+
+
 \section{Conclusion}
 \label{sec:Conclusion}
 
