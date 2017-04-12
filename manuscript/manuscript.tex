@@ -1,7 +1,6 @@
 
 
-%\documentclass[10pt, conference, compsocconf]{IEEEtran}
-\documentclass{sig-alternate-05-2015}
+\documentclass[10pt, conference, compsocconf]{IEEEtran}
 
 \usepackage{graphicx}
 \usepackage{algorithmic,listings}
@@ -17,8 +16,16 @@
 
 \graphicspath{{figures/}}
 \pagestyle{plain}
-\begin{document}
 
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+
+\begin{document}
 
 \title{Application-Level Regression Testing Framework using Jenkins}
 
@@ -26,7 +33,6 @@
 % author names and affiliations 
 % use a multiple column layout for up to two different
 % affiliations
-
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -59,8 +65,6 @@
 \maketitle
 \thispagestyle{plain}
 
-\setcopyright{licensedusgovmixed}
-
 \begin{abstract}
 Monitoring and testing for regression of large scale systems such as the NCSA's Blue Waters supercomputer are challenging tasks. 
 In this paper we describe the solution we came up with to perform those tasks. 
@@ -74,6 +78,8 @@ We show some use cases and describe our best practices for successfully using Je
 \begin{IEEEkeywords}
 System-monitoring; Regression-testing; Applications; Performance; Benchmarking
 \end{IEEEkeywords}
+
+\blfootnote{\textbf{Notice of copyright}: This manuscript has been authored by UT-Battelle, LLC under Contract No. DE-AC05-00OR22725 with the U.S. Department of Energy. The United States Government retains and the publisher, by accepting the article for publication, acknowledges that the United States Government retains a non-exclusive, paid-up, irrevocable, worldwide license to publish or reproduce the published form of this manuscript, or allow others to do so, for United States Government purposes. The Department of Energy will provide public access to these results of federally sponsored research in accordance with the DOE Public Access Plan (http://energy.gov/downloads/doe-public-access-plan).}
 
 \section{Introduction}
 \label{sec:introduction}
@@ -596,7 +602,7 @@ Due to our initial successful deployment of Jenkins as regression testing framew
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
-This research used resources at the National Institute for Computational Sciences (NICS) and the National Center for Supercomputing Applications (NCSA), funded by the National Science Foundation (NSF). 
+We thank Gary Rogers at NICS for his help in setting up and testing OTP integration. This research used resources at the National Institute for Computational Sciences (NICS) and the National Center for Supercomputing Applications (NCSA), funded by the National Science Foundation (NSF).  
 
 % References
 \bibliographystyle{unsrt}
