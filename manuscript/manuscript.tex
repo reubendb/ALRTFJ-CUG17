@@ -37,21 +37,21 @@
 %
 
 \author{
-%\IEEEauthorblockN{Christian Y. Cardall, Eirik Endeve, \& Anthony Mezzacappa}
-\IEEEauthorblockN{Timothy Bouvet, Galen Arnold}
-\IEEEauthorblockA{
-National Center for Supercomputing Applications\\
-University of Illinois at Urbana-Champaign, 61801\\
-tbouvet@illinois.edu, gwarnold@illinois.edu
-}
+  \IEEEauthorblockN{Reuben D. Budiardja}
+  \IEEEauthorblockA{
+    National Center for Computational Sciences\\
+    Oak Ridge National Laboratory, Oak Ridge, TN 37831\\
+    reubendb@ornl.gov}
 
 \and
 
-\IEEEauthorblockN{Reuben D. Budiardja}
-\IEEEauthorblockA{
-National Center for Computational Sciences\\
-Oak Ridge National Laboratory, Oak Ridge, TN 37831\\
-reubendb@ornl.gov}
+  \IEEEauthorblockN{Timothy Bouvet, Galen Arnold}
+  \IEEEauthorblockA{
+    National Center for Supercomputing Applications\\
+    University of Illinois at Urbana-Champaign, 61801\\
+    tbouvet@illinois.edu, gwarnold@illinois.edu
+  }
+
 }
 
 % make the title area
@@ -69,7 +69,7 @@ We show some use cases and describe our best practices for successfully using Je
 \end{abstract}
 
 \begin{IEEEkeywords}
-System-monitoring; Regression-testing; Application; Performance; Benchmarking
+System-monitoring; Regression-testing; Applications; Performance; Benchmarking
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -362,44 +362,64 @@ At NICS, this access is only allowed from the institution IP block only.
 
 \section{Anatomy of A Test Application}
 \label{sec:TestAnatomy}
-New software projects must be tested on our test and development system (TDS) and approved before deployment on Blue Waters and this is one of our key best practices. 
- Once a test is deployed it is assigned to a specific Jenkins tab via the "Edit View" link associated with that tab. 
- Tests still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
-\subsection{test description}
-We require a description for each test to describe: what is tested, resources used by the test, intent of the test, and scheduling frequency.
-\subsection{limits log files}
-The Jenkins test VM filled to capacity after the first few weeks of intensive use and an influx of several new tests that output long source code build detail. 
- We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
+In this section we briefly describe the primary elements of a test application. 
+A new test application (i.e. Jenkins job / project) must be tested on our test and development system (TDS) and approved before deployment on the user-facing production system (e.g. Blue Waters). 
+\footnote{We use the terms ''test application , ''test`` (for short), ''Jenkins project``, and ''Jenkins job`` interchangeably as they refer to the same thing.}
+This is one of our key best practices. 
 
-\subsection{ssh to a login host}
+Jenkins' dashboard by default shows the list of all Jenkins jobs under the ''All`` view tab. 
+One may create different ''views`` containing a list of selected projects. 
+In our case, we created several views to help us categorized our test applications.
+For example, once a test application is deployed on a production environment such as Blue Waters, it is assigned to the ''BlueWaters`` view. 
+This can be done by editing that view and add the selected applications to it.
+Tests that are still in development reside in the "All" tab view until they have been peer reviewed by at least one other test developer.
 
-There are several target ssh hosts which may be selected from our instance: the TDS (JYC), the main system, and the new software deployment login node within the main system. 
+\subsection{Name and Description}
+Beyond naming the Jenkins project, we require a description for each test to describe: what is tested, the resources used by the test, the intent of the test, and the scheduling frequency of the test.
 
- None of our tests run locally within the Jenkins VM.
-\subsection{run shell commands}
-A test is composed of shell command and where possible we try to be as transparent with our test construction as possible. 
-We prefer commands in the Jenkins configuration over running a script in the filesystem on the remote ssh target. 
-Scripts that are remote run with verbose mode or are displayed via "cat -n" to save output to the Jenkins console log and make for simpler debugging when a test fails.
-\subsubsection{test completes on login node}
-Some tests run only on the ssh login node and return more or less immediately. 
- Examples include tests for batch system functionality, ssh functionality, and filesystem functionality. 
- These tests are very similar in style to unit tests which target a limited set of functionality.
+\subsection{Limiting Number of Builds Kept}
+The Jenkins VM filled to capacity after the first few weeks of intensive use and an influx of several new tests that output long source code build detail.
+We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
+
+\subsection{Source Code Management}
+Jenkins is intended to be a continuous integration tool to assis software development, and therefore has in its core feature the ability to check out source code directly from a source code manager such as Subversion or Git (with plugin). For our purpose, most of our tests use a specified, static version of the application and therefore do not need this functionality. 
+
+We do have a small number of tests that automatically pulls from a repository containing SWTools2 scripts to build and test software. 
+SWTools2 is a software management tools we use to install center-provided applications and libraries. Having these tests in Jenkins is useful to make sure that we can still build the software correctly with any changes in the scripts or on the systems. 
+In section \ref{sec:UseCases} we show some examples of these.
+
+\subsection{Build Triggers}
+In this part we specify how the job is triggered. 
+For most cases we do periodic builds with a time-based specification.
+
+\subsection{Build Commands}
+This is where we specify the (shell) commands to actually build (and run) our test application. This may include the actual commands to compile and link the executable, submitting jobs to the queue, and getting back and checking results.
+
+Where possible, we try to be as transparent with our test construction as possible. 
+We prefer explicit shell commands specified via Jenkins interface over running a script in the filesystem on the remote HPC system. Remote scripts are run with verbose mode or are displayed via \texttt{cat -n} to so that their output are captured by Jenkins console log. This makes it simpler for debugging when a test fails.
+
+As described in section \ref{sec:JenkinsConfiguration}, there are two mechanisms to run these commands on the actual HPC systems. Using Jenkins nodes mechanism, one would select ''Execute Shell`` as the build step and put the commands there. Using the ''SSH`` mechanism, one would select ''Execute shell script on remote host using ssh``. The former requires that one checks the ''restrict where this project can be run`` selection to specify the HPC system. With the latter, in our instance there are several target ssh hosts which may be selected: the TDS (JYC), the production system (Blue Waters), and the new software deployment login node within the main system. None of our tests run locally within the Jenkins VM.
+
+There are basically two kinds of tests: 
+
+\subsubsection{Test Completes on the Login Node}
+Some tests run only on the login node and return more or less immediately. Examples include tests for batch system functionality, login / SSH functionality, and filesystem functionality. These tests are very similar in style to unit tests which target a limited set of functionality.
+
 \subsubsection{test is submitted to batch system}
-More comprehensive tests typically build and run an application or benchmark through the batch system. 
- These tests exercise multiple aspects of the system: (filesystem, compilers and modules, high-speed network, external connectivity to the internet...). 
- They block to completion so that we do not overburden the batch system with tests. 
- Unlike tests that run entirely on a login node, completion time can be highly variable depending on the queue depth and available backfill windows for the batch system.
-\subsection{post test actions}
-\subsubsection{scp files back to Jenkins host}
-Most comprehensive tests produce output that we use when debugging a failed test. 
- They may also produce plot data. 
- These files are copied back to the Jenkins host so that they can be viewed and/or incorporated into the plot feature of Jenkins.
-\subsubsection{plots}
-Successful tests save plot files and contribute a new data point to a plot. 
- The Jenkins server accumulates the data as rows in a spreadsheet (under /var/lib/jenkins/jobs/ ) and plots them via the "Plots" link for a test.
-\subsection{email notification}
-When the state of a test changes, email notification is sent to the test owner. 
- As a best practice we also use the email notification as a method of tracking authorship and each test has an email owner even if notifications are disabled for the test.
+More comprehensive tests typically build and run an application or benchmark through the batch system.  These tests exercise multiple aspects of the system: (filesystem, compilers and modules, high-speed network, external connectivity to the internet, etc.). These tests are written such that they block to completion so that we do not overburden the batch system with tests. Unlike tests that run entirely on a login node, completion time can be highly variable depending on the queue depth and available backfill windows for the batch system.
+ 
+
+Most comprehensive tests produce output that we use when debugging a failed test. They may also produce plot data. When using the ''SSH`` mechanism, these files are copied back to the Jenkins server so that they can be saved, viewed and/or incorporated into the plot feature of Jenkins. 
+ 
+\subsection{Post-build Actions}
+
+After a test is run, arbitrary numbers of post-build actions can be specified. The following are some that we have used. 
+
+\subsubsection{Plots}
+We installed Jenkins Plot plugin \cite{JenkinsPlotPlugin} so that successful tests can save plot files. The test needs to be written to generate a data point (e.g. performance value, timing, memory / IO bandwidth, etc.) to contribute to the plot. Under the hood, the Jenkins server accumulates the data as rows in a spreadsheet (in directory \texttt{/var/lib/jenkins/jobs/}) and plots them via the "Plots" link for a test.
+
+\subsubsection{Email Notification}
+When the state of a test changes, email notification is sent to the test owner. As a best practice we also use the email notification as a method of tracking authorship and each test has an email owner even if notifications are disabled for the test.
 
 \section{Use Cases}
 \label{sec:UseCases}
