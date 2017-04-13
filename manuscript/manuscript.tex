@@ -71,7 +71,7 @@ In this paper we describe the solution we came up with to perform those tasks.
 Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance.
 Jenkins, an automation server software, was chosen for its versatility, large user base, and multitude of plugins including collecting data and plotting test results over time. 
 We describe our Jenkins deployment to launch and monitor jobs on remote HPC system, perform authentication with one-time password, and integrate with our LDAP server for its authorization. 
-We show some use cases and describe our best practices for successfully using Jenkins as a user-level system-wide regression testing and monitoring framework for Blue Waters.
+We show some use cases and describe our best practices for successfully using Jenkins as a user-level system-wide regression testing and monitoring framework for large supercomputer systems.
 
 \end{abstract}
 
@@ -618,11 +618,11 @@ Testing too often, too large, or some combination of the two may perturb the sys
 This is the primary reason we require peer review for new tests.
 \end{itemize}
 
-Due to our initial successful deployment of Jenkins as regression testing framework on NCSA and NICS resources,  it is currently being deployed on other resources including the CADES (Compute and Data Environment for Science) resources at the Oak Ridge National Laboratory. 
+Our initial successful deployment of Jenkins as regression testing framework on NCSA and NICS resources leads to its being in deployment for other resources including the CADES (Compute and Data Environment for Science) resources at the Oak Ridge National Laboratory. 
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
-We thank Gary Rogers at NICS for his help in setting up and testing OTP integration. This research used resources at the National Institute for Computational Sciences (NICS) and the National Center for Supercomputing Applications (NCSA), funded by the National Science Foundation (NSF).  
+We thank Gary Rogers at NICS for his help in setting up and testing OTP integration. This material is based upon work performed using computational resources at the National Institute for Computational Sciences (NICS) and the National Center for Supercomputing Applications (NCSA), funded by the National Science Foundation (NSF). NICS is supported by the University of Tennessee and Oak Ridge National Laboratory through the Joint Institute for Computational Sciences\footnote{http://www.jics.tennessee.edu}. A portion of this research used resources of the Oak Ridge Leadership Computing Facility at the Oak Ridge National Laboratory, which is supported by the Office of Science of the U.S. Department of Energy under Contract No. DE-AC05-00OR22725. 
 
 % References
 \bibliographystyle{unsrt}
