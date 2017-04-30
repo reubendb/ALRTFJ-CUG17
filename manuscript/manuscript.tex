@@ -20,7 +20,7 @@
 \newcommand\blfootnote[1]{%
   \begingroup
   \renewcommand\thefootnote{}\footnote{#1}%
-  \addtocounter{footnote}{-1}%
+  \addtocounter{footnote}{-1}%!TEX encoding = UTF-8 Unicode
   \endgroup
 }
 
@@ -68,7 +68,7 @@
 \begin{abstract}
 Monitoring and testing for regression of large scale systems such as the NCSA's Blue Waters supercomputer are challenging tasks. 
 In this paper we describe the solution we came up with to perform those tasks. 
-Our goal was to come up with an automated solution for running user-level regression tests to evaluate system usability and performance.
+Our goal was to find an automated solution for running user-level regression tests to evaluate system usability and performance.
 Jenkins, an automation server software, was chosen for its versatility, large user base, and multitude of plugins including collecting data and plotting test results over time. 
 We describe our Jenkins deployment to launch and monitor jobs on remote HPC system, perform authentication with one-time password, and integrate with our LDAP server for its authorization. 
 We show some use cases and describe our best practices for successfully using Jenkins as a user-level system-wide regression testing and monitoring framework for large supercomputer systems.
@@ -84,8 +84,8 @@ System-monitoring; Regression-testing; Applications; Performance; Benchmarking
 \section{Introduction}
 \label{sec:introduction}
 
-Monitoring large and complex high-performance computing systems has many challenges. 
-Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in user needs and usage, and variable network traffic all interact to increase the system's complexity. 
+Monitoring large and complex high-performance computing systems have many challenges. 
+Layers and multiple versions of the software stack, system-level configurations, (parallel) file systems, diversity in user need and usage, and variable network traffic all interact to increase the system's complexity. 
 Although there exist monitoring systems for each of these components, they often do not capture the behavior of the system in aggregate, which in fact is what users and their applications experience. 
 Therefore an application-level system monitoring framework is needed to give us a more complete picture of the system behavior. 
  
@@ -103,9 +103,9 @@ Although it is typically used as a continuous integration tool in the software d
 These tasks may include building applications, executing them, deploying software, and running various custom-written tests and scripts. 
 We chose Jenkins as the tool for our regression testing framework because of its active development, wide community support, and the readily available ``plugins'' to perform various specific tasks.
 
-In this paper we describe in detail our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Water supercomputer at the National Center for Supercomputing Applications (NCSA), Darter, and Beacon at the National Institute for Computational Sciences (NICS). 
+In this paper we describe in detail our experience in using Jenkins to perform application-level regression testing on high-performance computing systems such as the Blue Waters supercomputer at the National Center for Supercomputing Applications (NCSA) \cite{NCSA}, Darter, and Beacon at the National Institute for Computational Sciences (NICS) \cite{NICS}. 
 These systems are Cray XE, XK, XC, and CS series. 
-The outline of this paper is as follows. In section \ref{sec:JenkinsConfiguration} we describe in detail how we configure Jenkins for our deployment. This is followed by a brief description what an application test consist of in section \ref{sec:TestAnatomy}. Section \ref{sec:UseCases} shows some use cases and results from applications we have used to monitor our systems. We end the paper with concluding remarks in section \ref{sec:Conclusion}.
+The outline of this paper is as follows. In section \ref{sec:JenkinsConfiguration} we describe in detail how we configure Jenkins for our deployment. This is followed by a brief description of application test structure in section \ref{sec:TestAnatomy}. Section \ref{sec:UseCases} shows some use cases and results from applications we have used to monitor our systems. We end the paper with concluding remarks in section \ref{sec:Conclusion}.
 
 
 \section{Jenkins Configuration}
@@ -115,7 +115,7 @@ The outline of this paper is as follows. In section \ref{sec:JenkinsConfiguratio
 Jenkins is typically available from the package repository of most major linux distributions. 
 One can also download and install Jenkins directly from its website. 
 We used the RPM package to install Jenkins on a CentOS virtual machine (VM). 
-Jenkins comes with its own web server so that managing and accessing Jenkins can be done via any web browser (in the next section we discuss using Apache HTTP Server in front of Jenkin's for better security). 
+Jenkins comes with its own web server so that managing and accessing Jenkins can be done via any web browser (in the next section we discuss using Apache HTTP Server in front of Jenkins for better security). 
 Typically Jenkins's web server listens on port 8080, but this is configurable. 
 
 
@@ -180,10 +180,10 @@ The benefit of this method is that it more closely mimicks the way real users ac
 There is no need for an additional daemon to run on the HPC login nodes and there is no need for the corresponding opening of a port on the Jenkins VM. 
 Because NCSA and NICS systems utilize two-factor RSA one-time password for user login, one must make a slight modification so that Jenkins can have automated logins. 
 The NCSA login node's \texttt{/etc/ssh/sshd_config} was modified to allow ''Public Key Authentication`` from the Jenkins VM unique IP address. 
-We created an NCSA user called ''bwjenkins`` with standard user privilege. 
+We created a NCSA user called ''bwjenkins`` with standard user privilege. 
 Pairs of SSH keys with passphrase were generated on the Jenkins VM with their public keys deployed on the appropriate login nodes in the bwjenkins user account to allow passwordless login. 
 The SSH plugins allow one to manage which key (and passphrase) to use with which system. 
-The keys on the Jenkins VM are located under the Jenkins home directory (by default \texttt{/var/lib/jenkins/.ssh}. 
+The keys on the Jenkins VM are located under the Jenkins home directory (by default) \texttt{/var/lib/jenkins/.ssh}. 
 Although this configuration can be somewhat tedious, when complete, Jenkins will be able to run scripts on the intended HPC systems via SSH. 
 For testing our setup, we created simple Jenkins projects whose task is to print out the \texttt{\$HOSTNAME} of the system.
 
@@ -193,7 +193,7 @@ Any files generated by the tests that need to be read by Jenkins (e.g. plot file
 A related drawback is that one must explicitly ensure that the build environment is ''clean`` on the remote system (e.g. no left over files or data from previous run). 
 This is because although Jenkins can clean up its workspace, this workspace (in Jenkins perspective) exists only on the VM. 
 The remote systems' workspaces are out of the reach of Jenkins. 
-This drawback also prevents one to easily allow concurrent builds of the same project. 
+This drawback also prevents one from easily allowing concurrent builds of the same project. 
 
 
 
@@ -357,7 +357,7 @@ Figure \ref{fig:LDAP-Jenkins} shows the screenshot of our LDAP configuration wit
 Since Jenkins allows one to enter arbitrary commands to be executed on login nodes, we want to further mitigate security risk via firewall rules. 
 In our installation, we only allow IP address originating from our institution block to access the secure HTTP portion and authenticate to access Jenkins. 
 At NCSA, the non secure, read-only, HTTP portion is accessible from anywhere. 
-At NICS, this access is only allowed from the institution IP block only. 
+At NICS, this access is only allowed from the institution IP block. 
 
 %/etc/sysconfig/iptables:
 %-A INPUT -s 141.142.0.0/16 -m state --state NEW -m tcp 
@@ -395,7 +395,7 @@ Jenkins is intended to be a continuous integration tool to assis software develo
 For our purpose, most of our tests use a specified, static version of the application and therefore do not need this functionality. 
 
 We do have a small number of tests that automatically pulls from a repository containing SWTools2 scripts to build and test software. 
-SWTools2 is a software management tools we use to install center-provided applications and libraries. Having these tests in Jenkins is useful to make sure that we can still build the software correctly with any changes in the scripts or on the systems. 
+SWTools2 is a software management tool we use to install center-provided applications and libraries. Having these tests in Jenkins is useful to make sure that we can still build the software correctly with any changes in the scripts or on the systems. 
 In section \ref{sec:UseCases} we show some examples of these.
 
 \subsection{Build Triggers}
@@ -404,17 +404,17 @@ For most cases we do periodic builds with a time-based specification.
 
 \subsection{Build Commands}
 This is where we specify the (shell) commands to actually build (and run) our test application. 
-This may include the actual commands to compile and link the executable, submitting jobs to the queue, and getting back and checking results.
+This may include the actual commands to compile and link the executable, submitting jobs to the queue, retrieving artifacts and checking results.
 
 Where possible, we try to be as transparent with our test construction as possible. 
 We prefer explicit shell commands specified via Jenkins interface over running a script in the filesystem on the remote HPC system. 
-Remote scripts are run with verbose mode or are displayed via \texttt{cat -n} to so that their output are captured by Jenkins console log. 
+Remote scripts are run with verbose mode or are displayed via \texttt{cat -n} so that their outputs are captured by the Jenkins project console log. 
 This makes it simpler for debugging when a test fails.
 
 As described in section \ref{sec:JenkinsConfiguration}, there are two mechanisms to run these commands on the actual HPC systems. 
 Using Jenkins nodes mechanism, one would select ''Execute Shell`` as the build step and put the commands there. Using the ''SSH`` mechanism, one would select ''Execute shell script on remote host using ssh``. 
 The former requires that one checks the ''restrict where this project can be run`` selection to specify the HPC system. 
-With the latter, in our instance there are several target ssh hosts which may be selected: the TDS (JYC), the production system (Blue Waters), and the new software deployment login node within the main system. 
+With the latter, in our instance there are several target ssh hosts which may be selected: the TDS (JYC), the production system (Blue Waters), and the new software deployment login node (H2ologin4) within the main system. 
 None of our tests run locally within the Jenkins VM.
 
 There are basically two kinds of tests: 
@@ -453,7 +453,7 @@ As a best practice we also use the email notification as a method of tracking au
 \subsection{IOR for Lustre Scratch Test}
 We created Jenkins tests to periodically run the IOR MPI parallel I/O benchmark at modest scale and validate filesystem functionality and performance for the scratch filesystem. 
 The test is scaled to provide representative performance numbers for a typical small application while not creating performance issues with other jobs or the larger filesystem.
-One of our best practices is to provide a management level summary description for casual Jenkins users who want to view the tests but do not need to understand the full Jenkins configuration and execution details. 
+One of our best practices is to provide a management level summary description (see Figure \ref{fig:IOR-bluewaters-descr}) for casual Jenkins users who want to view the tests but do not need to understand the full Jenkins configuration and execution details. 
  
 \begin{figure}[H]
 \centering
@@ -518,7 +518,7 @@ YVALUE=8352.71
 A plot like this helps us with performance baselines and we can quickly react to changes in the software environment or filesystem configuration that adversely impact performance.
 
 \subsection{mdtest Lustre Tests}
-The mdtest metadata test is run on the home and scratch filesystems to validate metadata server performance.  The IOR and mdtest user-facing tests complement the fine-grained detail we are able to glean from the backed system-side counters in our OVIS database where we record details about individual server metrics and network traffic on the Cray Gemini fabric. Figure \ref{fig:mdtest-plot} plots the results of this test over certain period of time. 
+The mdtest metadata test is run on the home and scratch filesystems to validate metadata server performance.  The IOR and mdtest user-facing tests complement the fine-grained detail we are able to glean from the backend system-side counters in our OVIS \cite{OVIS} database where we record details about individual server metrics and network traffic on the Cray Gemini fabric. Figure \ref{fig:mdtest-plot} plots the results of this test over a certain period of time. 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{mdtest-plot}
@@ -526,7 +526,7 @@ The mdtest metadata test is run on the home and scratch filesystems to validate 
 \label{fig:mdtest-plot}
 \end{figure}
 
-An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties. Setting notifications for unstable builds will trigger an e-mail every time the test state changes (from successful to failing and once again when successful ). Figure \ref{fig:mdtest-config-email} shows screenshot of the email notification configuration for the mdtest test in Jenkins.
+An additional best practice is to enable E-mail Notifications to the test author and/or other interested parties. Setting notifications for unstable builds will trigger an e-mail every time the test state changes (from successful to failing and once again when successful). Figure \ref{fig:mdtest-config-email} shows screenshot of the email notification configuration for the mdtest test in Jenkins.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{mdtest-config-email}
@@ -535,7 +535,7 @@ An additional best practice is to enable E-mail Notifications to the test author
 \end{figure}
 
 \subsection{Filesystem Dashboard}
-Our Jenkins instance is a source of information for a filesystem dashboard display we maintain in our wiki (Figure \ref{fig:wiki-dashboard}. The \texttt{http://} URLs for the plot images can be referred directly and are shown on the dashboard to provide a recent-time display of filesystem metrics from a user point of view. We add a Jenkins test to track response time of \texttt{/bin/ls} on the login nodes---a reasonable metric of metadata server health and also the most common problem reported by users when we are having filesystem issues.
+Our Jenkins instance is a source of information for a filesystem dashboard display we maintain in our wiki (Figure \ref{fig:wiki-dashboard}). The \texttt{http://} URLs for the plot images can be referred directly and are shown on the dashboard to provide a recent-time display of filesystem metrics from a user point of view. We add a Jenkins test to track response time of \texttt{/bin/ls} on the login nodes---a reasonable metric of metadata server health and also the most common problem reported by users when we are having filesystem issues.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{wiki-dashboard}
@@ -544,7 +544,7 @@ Our Jenkins instance is a source of information for a filesystem dashboard displ
 \end{figure}
 
 \subsection{Special Projects}
-The initial display tabs (i.e. Jenkins ''Views``) in our Jenkins instance are used to group tests that are run periodically in production. We add separate ''Views`` for special projects. For example we clone existing tests for evaluating a new software stack on our test login node (''h2ologin4`` view).  Our TDS (JYC) has a separate set of tests from our production system and is used as our Jenkins development mule. The sustained petascale performance benchmarks (SPP) are in their own tab because they run at scale and are only run on-demand by staff (i.e. not scheduled to run periodically by Jenkins). Figure \ref{fig:tabs-display} illustrates our use of Jenkins views to organize our application tests.
+The initial display tabs (i.e. Jenkins ''Views``) in our Jenkins instance are used to group tests that are run periodically in production. We add separate ''Views`` for special projects. For example we clone existing tests for evaluating a new software stack on our test login node (''H2ologin4`` view).  Our TDS (JYC) has a separate set of tests from our production system and is used as our Jenkins development mule. The sustained petascale performance benchmarks (SPP) are in their own tab because they run at scale and are only run on-demand by staff (i.e. not scheduled to run periodically by Jenkins). Figure \ref{fig:tabs-display} illustrates our use of Jenkins views to organize our application tests.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{tabs-display}
@@ -553,7 +553,7 @@ The initial display tabs (i.e. Jenkins ''Views``) in our Jenkins instance are us
 \end{figure}
 
 \subsection{NAMD Test}
-NAMD is one of many applications provided system-wide at NICS due to its high use. It is managed via SWTools2 \cite{SWTools2} such that build and test recipes are standardized. For the purpose of regression testing, we have written several glue scripts in SWTools to make it work seamlessly in Jenkins. Figure \ref{fig:NAMD-jenkins} shows screenshot of shell commands in Jenkins interface to build and test this application. The commands hide many of the complexities of building and executing the application behind SWTools recipes for NAMD. However, they are exactly the same commands used to build and test this application for provisioning to users \footnote{SWTools recipes for this case can be gleaned at  https://github.com/reubendb/SWTools-NICS-CI}.
+NAMD is one of many applications provided system-wide at NICS due to its high use. It is managed via SWTools2 \cite{SWTools2} such that build and test recipes are standardized. For the purpose of regression testing, we have written several glue scripts in SWTools to make it work seamlessly in Jenkins. Figure \ref{fig:NAMD-jenkins} shows a screenshot of shell commands in the Jenkins interface to build and test this application. The commands hide many of the complexities of building and executing the application behind SWTools recipes for NAMD. However, they are exactly the same commands used to build and test this application for provisioning to users \footnote{SWTools recipes for this case can be gleaned at  https://github.com/reubendb/SWTools-NICS-CI}.
 
 \begin{figure}[H]
 \centering
@@ -575,7 +575,7 @@ For this application testing, we use a well known NAMD benchmark case ''ApoA1''.
 \section{Conclusion}
 \label{sec:Conclusion}
 
-In this paper we have described our deployment of Jenkins automation server for user-level, application-based system monitoring and regression testing on large installation of HPC systems at NCSA and NICS. 
+In this paper we have described our deployment of Jenkins automation server for user-level, application-based system monitoring and regression testing on large installations of HPC systems at NCSA and NICS. 
 This monitoring system has proved to be useful in early detection of system issues. 
 
 Another value of this system is to anticipate issues related to software updates. 
