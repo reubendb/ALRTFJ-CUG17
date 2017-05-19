@@ -124,7 +124,7 @@ Typically Jenkins's web server listens on port 8080, but this is configurable.
 \subsection{Accessing HPC Test Systems}
 Jenkins has an implicit assumption that the machine on which it is installed is also the primary machine being used to build and test the software. 
 In our case, this is not what we want. 
-In fact, our applications will be built on the HPC system on which we intent to run the tests (typically on the login nodes), and will be run on the compute nodes of the HPC system (i.e. via batch job submission to the job queueing system). 
+In fact, our applications will be built on the HPC system on which we intend to run the tests (typically on the login nodes), and will be run on the compute nodes of the HPC system (i.e. via batch job submission to the job queueing system). 
 This is because not only do we want to test the runtime performance of the applications, but we also want to ensure that the software and programming environment of the system can build the applications correctly. 
 Incidentally, the latter also informs us of any user-level problem such as slow or overloaded login nodes, slow file system access, erroneous or incompatible default software (library, compilers, etc) versions. 
 In short, we want our tests to simulate the typical workflow of a user on the system being tested.
@@ -393,7 +393,7 @@ The Jenkins VM filled to capacity after the first few weeks of intensive use and
 We retroactively modified all tests to limit the number of old build logs retained (max 50 for most tests). 
 
 \subsection{Source Code Management}
-Jenkins is intended to be a continuous integration tool to assis software development, and therefore has in its core feature the ability to check out source code directly from a source code manager such as Subversion or Git (with plugin).
+Jenkins is intended to be a continuous integration tool to help with software development, and therefore has in its core features the ability to check out source code directly from a source code manager such as Subversion or Git (with plugin).
 For our purpose, most of our tests use a specified, static version of the application and therefore do not need this functionality. 
 
 We do have a small number of tests that automatically pulls from a repository containing SWTools2 scripts to build and test software. 
