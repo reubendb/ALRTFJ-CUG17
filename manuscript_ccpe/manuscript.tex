@@ -436,9 +436,9 @@ Where scripts on the remote SSH site are used, they are echoed and/or displayed 
 \caption{ IOR configuration sample }
 \label{fig:IOR-configuration-sample}
 \end{figure}
-The IOR test is set to run as scheduled by Jenkins with a best-effort through our batch system.
+The IOR test is set to run as scheduled by Jenkins with a best-effort through our batch system. Figure \ref{fig:IOR-configuration-sample} shows sample configuration script for this test. 
 The test synchronously blocks such that the next test will not start until the previous one has completed.
-We employ a watchdog script (see Listing \ref{lst:watchdog}) to monitor the batch queue and keep the test active until the system marks it as finished.
+We employ a watchdog script (see Listing \ref{lst:watchdog} and its output \ref{fig:IOR-watchdog-out}) to monitor the batch queue and keep the test active until the system marks it as finished.
 This has the side effect of making the minimum test time an integer multiple of the sleep time in the watchdog script.
 This may be adjusted to fit individual site needs.
 \begin{lstlisting}[frame=tb,captionpos=t,language=bash,caption={pbs/torque watchdog script}, label=lst:watchdog]
